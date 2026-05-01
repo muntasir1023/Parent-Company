@@ -1,1 +1,694 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PARENT COMPANY | Architectural Holding</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Inter:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --obsidian: #0A0A0A;
+            --champagne: #D4C8B6;
+            --gold-dim: rgba(212, 200, 182, 0.12);
+            --gold-bright: rgba(212, 200, 182, 0.5);
+            --text-main: #ECECE7;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @media (pointer: fine) {
+            * { cursor: none !important; }
+            #cursor-shard, #cursor-tracer { display: block !important; }
+        }
+
+        body {
+            background-color: var(--obsidian);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        .serif { font-family: 'Bodoni Moda', serif; }
+
+        /* --- SIGNATURE CURSOR --- */
+        #cursor-shard {
+            width: 2px; height: 20px;
+            background: var(--champagne);
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            transition: height 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            display: none;
+        }
+        
+        #cursor-tracer {
+            width: 40px; height: 40px;
+            border: 1px solid var(--gold-dim);
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            display: none;
+        }
+
+        .cursor-active #cursor-shard { height: 60px; background: #fff; }
+        .cursor-active #cursor-tracer { width: 80px; height: 80px; border-color: var(--champagne); border-width: 2px; }
+
+        /* Noise Texture */
+        .noise {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9998;
+            pointer-events: none;
+            opacity: 0.05;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Typography Scailing */
+        .h-xl { font-size: clamp(3rem, 12vw, 18rem); line-height: 0.85; letter-spacing: -0.05em; }
+        .p-luxury { font-size: clamp(1.1rem, 1.5vw, 1.4rem); font-weight: 300; letter-spacing: 0.01em; }
+
+        /* Structural Elements */
+        .glass-panel {
+            background: rgba(15, 15, 15, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--gold-dim);
+            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s ease;
+        }
+
+        /* Header Animation Classes */
+        .nav-hidden {
+            transform: translate(-50%, -150%);
+            opacity: 0;
+        }
+        .nav-visible {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(80px);
+            transition: all 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        #hero-title {
+            will-change: transform;
+            transition: transform 0.1s ease-out;
+        }
+
+        .hero-bg {
+            background: 
+                radial-gradient(circle at 80% 20%, rgba(212, 200, 182, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 20% 80%, rgba(212, 200, 182, 0.03) 0%, transparent 40%),
+                var(--obsidian);
+        }
+
+        /* Buttons & Actions */
+        .btn-luxury {
+            position: relative;
+            padding: 1.5rem 3.5rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            font-weight: 600;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            border: 1px solid var(--gold-dim);
+        }
+        .btn-luxury:hover {
+            background: var(--champagne);
+            color: var(--obsidian);
+            border-color: var(--champagne);
+            padding-left: 4rem;
+            padding-right: 3rem;
+        }
+
+        .action-text {
+            font-size: 0.9rem;
+            letter-spacing: 0.4em;
+            font-weight: 500;
+            color: var(--champagne);
+        }
+
+        /* Scroll Progress */
+        #scroll-progress {
+            position: fixed;
+            top: 0; left: 0; width: 0%; height: 2px;
+            background: var(--champagne);
+            z-index: 1001;
+        }
+
+        /* Language Grid Styles */
+        .lang-btn {
+            font-family: 'Bodoni Moda', serif;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            opacity: 0.3;
+        }
+        .lang-btn:hover {
+            opacity: 1;
+            color: var(--champagne);
+            transform: translateX(10px);
+        }
+        .lang-grid-container {
+            max-height: 70vh;
+            overflow-y: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        .lang-grid-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* --- LUXURY PROJECT MARQUEE --- */
+        .marquee-wrapper {
+            display: flex;
+            overflow: hidden;
+            user-select: none;
+            gap: 2rem;
+            padding: 4rem 0;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+        .marquee-content {
+            display: flex;
+            flex-shrink: 0;
+            gap: 2rem;
+            min-width: 100%;
+            animation: scroll-luxury 120s linear infinite;
+        }
+        @keyframes scroll-luxury {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(-100% - 2rem)); }
+        }
+        @media (min-width: 768px) {
+            .marquee-wrapper { gap: 4rem; padding: 8rem 0; }
+            .marquee-content { gap: 4rem; }
+            @keyframes scroll-luxury {
+                from { transform: translateX(0); }
+                to { transform: translateX(calc(-100% - 4rem)); }
+            }
+        }
+        .project-card {
+            transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+            background: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+            border: 1px solid rgba(212, 200, 182, 0.05) !important;
+        }
+        @media (hover: hover) {
+            .project-card:hover {
+                transform: translateY(-20px) scale(1.02);
+                border-color: var(--champagne) !important;
+                background: rgba(212, 200, 182, 0.08);
+            }
+        }
+
+        /* Mobile Menu Overlay */
+        #mobile-menu {
+            clip-path: circle(0% at 90% 5%);
+            transition: clip-path 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        #mobile-menu.active {
+            clip-path: circle(150% at 90% 5%);
+        }
+        .mobile-link {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        #mobile-menu.active .mobile-link {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-[#0A0A0A]">
+
+    <div id="scroll-progress"></div>
+    <div id="cursor-shard"></div>
+    <div id="cursor-tracer"></div>
+    <div class="noise"></div>
+
+    <!-- Floating Navigation -->
+    <nav id="main-nav" class="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[1000] glass-panel px-5 md:px-10 py-4 rounded-full flex justify-between items-center nav-visible">
+        <div class="flex items-center gap-4">
+            <div class="w-8 h-8 border border-[var(--champagne)] flex items-center justify-center rotate-45">
+                <span class="rotate-[-45deg] text-[8px] font-bold">P/C</span>
+            </div>
+            <div>
+                <span class="text-[10px] tracking-[0.8em] font-bold uppercase text-white block leading-none">Parent Company</span>
+                <span class="text-[8px] tracking-[0.4em] text-[var(--champagne)] uppercase mt-1 block opacity-80">Est. 2026</span>
+            </div>
+        </div>
+
+        <!-- Integrated Header Actions -->
+        <div class="flex items-center gap-4 md:gap-10">
+            <div class="hidden md:flex items-center gap-4 lg:gap-8">
+                <a href="#services" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Services</a>
+                <a href="#contact" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Contact</a>
+            </div>
+            
+            <div class="w-px h-6 bg-white/10 hidden sm:block"></div>
+            
+            <div class="flex items-center gap-4 md:gap-8">
+                <button onclick="toggleLangModal()" class="flex items-center gap-2 group transition-all">
+                    <i data-lucide="globe" class="w-4 h-4 text-[var(--champagne)]"></i>
+                    <span id="current-lang-label" class="text-[8px] tracking-[0.3em] uppercase text-[var(--champagne)] hidden md:inline">English</span>
+                </button>
+                
+                <!-- Mobile Menu Toggle -->
+                <button onclick="toggleMobileMenu()" class="md:hidden flex flex-col gap-1.5 p-2">
+                    <div id="bar1" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
+                    <div id="bar2" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-[1500] bg-[#0A0A0A] flex flex-col justify-center items-center md:hidden">
+        <div class="space-y-12 text-center">
+            <div class="mobile-link delay-100">
+                <a href="#services" onclick="toggleMobileMenu()" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Services</a>
+            </div>
+            <div class="mobile-link delay-200">
+                <a href="#projects" onclick="toggleMobileMenu()" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Projects</a>
+            </div>
+            <div class="mobile-link delay-300">
+                <a href="#contact" onclick="toggleMobileMenu()" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Contact</a>
+            </div>
+            <div class="mobile-link delay-[400ms] pt-12">
+                <p class="text-[8px] tracking-[0.8em] text-white/20 uppercase">Est. 2026</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Language Navigation - Enhanced Mobile Friendly -->
+    <div id="lang-overlay" class="fixed inset-0 z-[2000] bg-[#0c0c0c]/98 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-1000 flex flex-col items-center">
+        <div class="w-full max-w-7xl px-8 pt-12 md:pt-20 pb-8 flex justify-between items-end">
+            <div>
+                <p class="action-text text-[10px] opacity-40 uppercase mb-2">Region Selection</p>
+                <h2 class="text-4xl md:text-6xl serif italic text-white">Universal <span class="text-[var(--champagne)]">Access</span></h2>
+            </div>
+            <button onclick="toggleLangModal()" class="flex flex-col items-center gap-2 text-[var(--champagne)] opacity-40 hover:opacity-100 transition-opacity">
+                <i data-lucide="x" class="w-6 h-6 md:w-12 md:h-12 font-thin"></i>
+                <span class="text-[8px] tracking-[0.5em] hidden md:block">CLOSE</span>
+            </button>
+        </div>
+
+        <div class="w-full max-w-7xl px-8 lang-grid-container pb-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-24">
+                <!-- Europe -->
+                <div class="space-y-8">
+                    <p class="text-[10px] tracking-[0.8em] text-white/20 uppercase border-l border-[var(--gold-dim)] pl-6">Western Hub</p>
+                    <div class="grid grid-cols-2 md:grid-cols-1 gap-4">
+                        <button onclick="setLanguage('en')" class="lang-btn text-xl md:text-5xl text-left">English</button>
+                        <button onclick="setLanguage('nl')" class="lang-btn text-xl md:text-5xl text-left">Nederlands</button>
+                        <button onclick="setLanguage('fr')" class="lang-btn text-xl md:text-5xl text-left">Français</button>
+                        <button onclick="setLanguage('de')" class="lang-btn text-xl md:text-5xl text-left">Deutsch</button>
+                        <button onclick="setLanguage('it')" class="lang-btn text-xl md:text-5xl text-left">Italiano</button>
+                        <button onclick="setLanguage('es')" class="lang-btn text-xl md:text-5xl text-left">Español</button>
+                        <button onclick="setLanguage('sv')" class="lang-btn text-xl md:text-5xl text-left">Svenska</button>
+                        <button onclick="setLanguage('pt')" class="lang-btn text-xl md:text-5xl text-left">Português</button>
+                    </div>
+                </div>
+                
+                <!-- Asia -->
+                <div class="space-y-8">
+                    <p class="text-[10px] tracking-[0.8em] text-white/20 uppercase border-l border-[var(--gold-dim)] pl-6">Eastern Hub</p>
+                    <div class="grid grid-cols-2 md:grid-cols-1 gap-4">
+                        <button onclick="setLanguage('zh')" class="lang-btn text-2xl md:text-6xl text-left font-light">中文</button>
+                        <button onclick="setLanguage('ja')" class="lang-btn text-2xl md:text-6xl text-left font-light">日本語</button>
+                        <button onclick="setLanguage('ko')" class="lang-btn text-2xl md:text-6xl text-left font-light">한국어</button>
+                        <button onclick="setLanguage('bn')" class="lang-btn text-xl md:text-5xl text-left">বাংলা</button>
+                        <button onclick="setLanguage('hi')" class="lang-btn text-xl md:text-5xl text-left">हिन्दी</button>
+                    </div>
+                </div>
+
+                <!-- Global / Emerging -->
+                <div class="space-y-8">
+                    <p class="text-[10px] tracking-[0.8em] text-white/20 uppercase border-l border-[var(--gold-dim)] pl-6">Strategic Nodes</p>
+                    <div class="p-8 border border-white/5 glass-panel rounded-sm">
+                        <p class="text-[11px] text-white/40 mb-6 leading-relaxed">Parent Company protocols are deployed in primary economic centers. Our language coverage reflects our current and projected physical presence for 2026-2030.</p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-2 h-2 bg-[var(--champagne)] rounded-full animate-pulse"></div>
+                            <span class="text-[9px] tracking-[0.3em] uppercase text-[var(--champagne)]">All Systems Operational</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <main>
+        <section class="relative min-h-[85vh] md:min-h-screen flex flex-col justify-center px-6 md:px-24 lg:px-32 hero-bg">
+            <div class="max-w-[140rem] w-full mx-auto relative z-10 pt-32">
+                <div class="mb-12">
+                    <div class="flex items-center gap-8 overflow-hidden">
+                        <div class="w-16 h-px bg-[var(--champagne)]"></div>
+                        <p class="action-text uppercase opacity-80" id="hero-tag">Synthesis of Civilizations — Est. 2026</p>
+                    </div>
+                </div>
+                
+                <h2 id="hero-title" class="h-xl serif reveal-up mb-16 md:mb-24">
+                    The Global <br> 
+                    <span class="italic font-light text-[var(--champagne)]">Standard.</span>
+                </h2>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-end">
+                    <div class="lg:col-span-6">
+                        <p id="hero-desc" class="p-luxury text-white/50 leading-relaxed reveal-up delay-200 max-w-3xl">
+                            Architecting the expansion of high-fidelity entities across the transcontinental axis. We bridge the rigorous fiscal heritage of Europe with the exponential velocity of emerging Asian markets.
+                        </p>
+                        <div class="mt-16 reveal-up delay-300">
+                            <button class="btn-luxury group w-full sm:w-auto text-center">
+                                Explore Architecture 
+                                <i data-lucide="arrow-right" class="inline-block w-4 h-4 ml-4 transition-transform group-hover:translate-x-2"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="lg:col-span-6 flex flex-col items-center lg:items-end reveal-up delay-500">
+                        <div class="glass-panel p-6 md:p-10 flex gap-12 md:gap-20 items-center rounded-sm border-white/5 bg-white/5">
+                            <div class="text-right">
+                                <span class="text-3xl md:text-5xl serif italic text-[var(--champagne)] block">02</span>
+                                <span class="action-text text-[9px] opacity-40 block mt-2">Active Hubs</span>
+                            </div>
+                            <div class="w-px h-12 bg-white/10"></div>
+                            <div class="text-right">
+                                <span class="text-3xl md:text-5xl serif italic text-[var(--champagne)] block">26</span>
+                                <span class="action-text text-[9px] opacity-40 block mt-2">Cycle Start</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Vision -->
+        <section id="vision" class="py-24 md:py-72 px-8 md:px-24 lg:px-32 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-px h-full bg-white/5"></div>
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-24">
+                    <div class="lg:col-span-7">
+                        <h3 class="action-text mb-8 md:mb-16 opacity-30">01 / Nexus</h3>
+                        <p class="text-5xl md:text-7xl lg:text-8xl serif italic leading-[1.1] reveal-up">
+                            Scale is the <br> ultimate <span class="text-[var(--champagne)] underline decoration-1 underline-offset-8">Form.</span>
+                        </p>
+                    </div>
+                    <div class="lg:col-span-5 flex flex-col justify-end gap-16 reveal-up delay-200">
+                        <p class="p-luxury text-white/40 leading-loose">
+                            Established in 2026, we operate at the intersection of anthropological insight and structural governance. Our expansion protocols ensure your legacy remains untarnished in new territories.
+                        </p>
+                        <div class="flex items-center gap-10">
+                            <div class="w-20 h-px bg-[var(--champagne)]"></div>
+                            <span class="action-text text-[11px]">Legacy First Architecture</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Grid -->
+        <section id="services" class="py-24 md:py-72 bg-[#0D0D0C]">
+            <div class="px-8 md:px-24 lg:px-32 mb-20 md:mb-40 flex flex-col md:flex-row justify-between items-end">
+                <div>
+                    <h2 class="action-text opacity-30 mb-8 uppercase">02 / Services</h2>
+                    <h3 class="text-5xl md:text-8xl serif">Transcontinental <br> <span class="italic text-[var(--champagne)]">Expertise</span></h3>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3">
+                <div class="group border border-white/5 p-12 md:p-24 space-y-12 hover:bg-white/5 transition-all duration-1000 relative reveal-up">
+                    <div class="absolute top-10 right-10 text-[var(--champagne)] opacity-10 text-9xl serif italic group-hover:opacity-20 transition-opacity">01</div>
+                    <h4 class="text-3xl tracking-[0.2em] font-light uppercase">Structural <br> Governance</h4>
+                    <p class="text-white/30 p-luxury leading-relaxed font-light">Hardening holding structures for high-value intellectual property across multi-legal jurisdictions.</p>
+                </div>
+                <div class="group border border-white/5 p-12 md:p-24 space-y-12 hover:bg-white/5 transition-all duration-1000 relative reveal-up delay-150">
+                    <div class="absolute top-10 right-10 text-[var(--champagne)] opacity-10 text-9xl serif italic group-hover:opacity-20 transition-opacity">02</div>
+                    <h4 class="text-3xl tracking-[0.2em] font-light uppercase">Market <br> Integration</h4>
+                    <p class="text-white/30 p-luxury leading-relaxed font-light">Proprietary stacks that synthesize local ground truths with central board objectives.</p>
+                </div>
+                <div class="group border border-white/5 p-12 md:p-24 space-y-12 hover:bg-white/5 transition-all duration-1000 relative reveal-up delay-300">
+                    <div class="absolute top-10 right-10 text-[var(--champagne)] opacity-10 text-9xl serif italic group-hover:opacity-20 transition-opacity">03</div>
+                    <h4 class="text-3xl tracking-[0.2em] font-light uppercase">Capital <br> Fidelity</h4>
+                    <p class="text-white/30 p-luxury leading-relaxed font-light">Precision positioning that ensures luxury narratives remain premium in rapid-growth markets.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Current Projects (Venture Marquee) -->
+        <section id="projects" class="py-24 md:py-72 bg-[#0A0A0A] overflow-hidden">
+            <div class="px-8 md:px-24 lg:px-32 mb-20">
+                <h3 class="action-text opacity-30 mb-8 uppercase">03 / Venture Marquee</h3>
+                <h2 class="text-6xl md:text-8xl serif">Current <br> <span class="italic text-[var(--champagne)]">Projects</span></h2>
+            </div>
+
+            <div class="marquee-wrapper border-y border-white/5">
+                <div class="marquee-content">
+                    <!-- Dunya -->
+                    <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
+                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Retail & Logistics</span>
+                        <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Dunya</h4>
+                        <p class="text-white/40 p-luxury leading-relaxed font-light">Premium International Retail & Brutalist Grocery.</p>
+                    </div>
+                    <!-- Vareno Events BD -->
+                    <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
+                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Events & Logistics</span>
+                        <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Vareno Events BD</h4>
+                        <p class="text-white/40 p-luxury leading-relaxed font-light">High-end Event Management & Luxury Logistics.</p>
+                    </div>
+                    <!-- Véleur -->
+                    <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
+                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Fashion & Artistry</span>
+                        <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Véleur</h4>
+                        <p class="text-white/40 p-luxury leading-relaxed font-light">Minimalist Luxury Couture & Silk Road Artistry.</p>
+                    </div>
+                    <!-- Gontobbo -->
+                    <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
+                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Travel & Curation</span>
+                        <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Gontobbo</h4>
+                        <p class="text-white/40 p-luxury leading-relaxed font-light">Travel Architecture & Destination Curation.</p>
+                    </div>
+                </div>
+                <!-- Duplicate for seamless scroll -->
+                <div class="marquee-content" aria-hidden="true">
+                    <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
+                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Retail & Logistics</span>
+                        <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Dunya</h4>
+                        <p class="text-white/40 p-luxury leading-relaxed font-light">Premium International Retail & Brutalist Grocery.</p>
+                    </div>
+                    <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
+                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Events & Logistics</span>
+                        <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Vareno Events BD</h4>
+                        <p class="text-white/40 p-luxury leading-relaxed font-light">High-end Event Management & Luxury Logistics.</p>
+                    </div>
+                    <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
+                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Fashion & Artistry</span>
+                        <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Véleur</h4>
+                        <p class="text-white/40 p-luxury leading-relaxed font-light">Minimalist Luxury Couture & Silk Road Artistry.</p>
+                    </div>
+                    <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
+                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Travel & Curation</span>
+                        <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Gontobbo</h4>
+                        <p class="text-white/40 p-luxury leading-relaxed font-light">Travel Architecture & Destination Curation.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="px-8 md:px-24 lg:px-32 mt-20 flex justify-end">
+                <div class="flex items-center gap-10 reveal-up">
+                    <div class="w-20 h-px bg-[var(--champagne)]"></div>
+                    <span class="action-text text-[11px] opacity-40">Entities under management</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="min-h-screen bg-white text-black flex items-center justify-center relative overflow-hidden">
+            <div class="absolute inset-0 opacity-[0.03] pointer-events-none">
+                <div class="w-full h-full flex items-center justify-center">
+                    <span class="text-[40vw] font-bold tracking-tighter">HQ</span>
+                </div>
+            </div>
+            
+            <div class="px-8 md:px-24 lg:px-32 max-w-[140rem] w-full text-center relative z-10">
+                <h2 class="action-text text-black/30 mb-20">04 / Contact Us</h2>
+                <h3 class="text-5xl md:text-[14vw] serif leading-[0.75] mb-24 reveal-up">The Future <br> <span class="italic font-light">Architected.</span></h3>
+                
+                <div class="flex flex-col md:flex-row justify-center items-center gap-16 md:gap-40 reveal-up delay-200">
+                    <div class="text-left space-y-6 group">
+                        <p class="action-text text-black/30">Direct Correspondence</p>
+                        <a href="mailto:hq@parentcompany.global" class="text-2xl md:text-5xl font-light hover:text-[var(--champagne)] transition-colors duration-500 break-all md:break-normal">hq@parentcompany.global</a>
+                        <div class="w-0 group-hover:w-full h-px bg-black transition-all duration-700"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-black py-20 md:py-40 px-8 md:px-24 lg:px-32 border-t border-white/5">
+        <div class="max-w-[140rem] mx-auto grid grid-cols-1 lg:grid-cols-4 gap-20">
+            <div class="col-span-1 lg:col-span-2 space-y-12">
+                <div class="flex items-center gap-6">
+                    <div class="w-10 h-10 border border-[var(--champagne)] flex items-center justify-center rotate-45">
+                        <span class="rotate-[-45deg] text-[10px] font-bold text-white">P/C</span>
+                    </div>
+                    <h4 class="text-xl tracking-[1.2em] uppercase font-bold text-white">Parent Company</h4>
+                </div>
+                <p class="p-luxury text-white/20 max-w-sm">High-fidelity business architecture for the 2026 transcontinental economic era. All rights reserved.</p>
+            </div>
+            <div class="flex flex-col justify-between lg:items-end text-left lg:text-right col-span-1 lg:col-span-2">
+                <div class="space-y-4">
+                    <p class="action-text text-white/20 uppercase">Legal</p>
+                    <div class="space-y-2 text-[10px] tracking-[0.4em] uppercase text-white/40">
+                        <a href="#" class="block hover:text-white transition-colors">Privacy Protocol</a>
+                        <a href="#" class="block hover:text-white transition-colors">Holding Charter</a>
+                    </div>
+                </div>
+                <p class="text-[9px] tracking-[0.6em] text-white/20 mt-20 uppercase">© 2026 PARENT COMPANY HOLDING. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // --- SIGNATURE CURSOR ---
+        const shard = document.getElementById('cursor-shard');
+        const tracer = document.getElementById('cursor-tracer');
+        let mouseX = 0, mouseY = 0;
+        let shardX = 0, shardY = 0;
+        let tracerX = 0, tracerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            shardX += (mouseX - shardX) * 0.15;
+            shardY += (mouseY - shardY) * 0.15;
+            tracerX += (mouseX - tracerX) * 0.08;
+            tracerY += (mouseY - tracerY) * 0.08;
+
+            shard.style.left = shardX + 'px';
+            shard.style.top = shardY + 'px';
+            tracer.style.left = tracerX + 'px';
+            tracer.style.top = tracerY + 'px';
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // --- HERO PARALLAX (DESKTOP) ---
+        const heroTitle = document.getElementById('hero-title');
+        let lastScroll = 0;
+        
+        function parallaxEffect() {
+            if (window.innerWidth > 1024) {
+                heroTitle.style.transform = `translate3d(0, ${window.scrollY * 0.25}px, 0)`;
+            }
+            requestAnimationFrame(parallaxEffect);
+        }
+        parallaxEffect();
+
+        document.querySelectorAll('a, button, .group').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-active'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-active'));
+        });
+
+        // --- DYNAMIC HEADER CONTROL ---
+        const nav = document.getElementById('main-nav');
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener('scroll', () => {
+            const h = document.documentElement;
+            const b = document.body;
+            const st = 'scrollTop';
+            const sh = 'scrollHeight';
+            const percent = (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100;
+            document.getElementById('scroll-progress').style.width = percent + '%';
+
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                nav.classList.replace('nav-visible', 'nav-hidden');
+            } else {
+                nav.classList.replace('nav-hidden', 'nav-visible');
+            }
+            lastScrollY = currentScrollY;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (e.clientY < 100) {
+                nav.classList.replace('nav-hidden', 'nav-visible');
+            }
+        });
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+
+        // --- REGION CONTROL ---
+        function toggleLangModal() {
+            const modal = document.getElementById('lang-overlay');
+            const isActive = modal.classList.contains('opacity-100');
+            modal.classList.toggle('opacity-100', !isActive);
+            modal.classList.toggle('pointer-events-auto', !isActive);
+            modal.classList.toggle('opacity-0', isActive);
+            modal.classList.toggle('pointer-events-none', isActive);
+            document.body.style.overflow = isActive ? 'auto' : 'hidden';
+        }
+
+        // --- MOBILE MENU CONTROL ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const bar1 = document.getElementById('bar1');
+            const bar2 = document.getElementById('bar2');
+            const isActive = menu.classList.toggle('active');
+            
+            if (isActive) {
+                bar1.style.transform = 'translateY(4px) rotate(45deg)';
+                bar2.style.transform = 'translateY(-4px) rotate(-45deg)';
+            } else {
+                bar1.style.transform = 'none';
+                bar2.style.transform = 'none';
+            }
+        }
+
+        const langData = {
+            en: { label: "English", title: "The Global <br> <span class='italic font-light text-[var(--champagne)]'>Standard.</span>", desc: "Architecting the expansion of high-fidelity entities across the transcontinental axis. We bridge the rigorous fiscal heritage of Europe with the exponential velocity of emerging Asian markets." },
+            bn: { label: "বাংলা", title: "বৈশ্বিক <br> <span class='italic font-light text-[var(--champagne)]'>মানদণ্ড।</span>", desc: "মহাদেশীয় অক্ষ জুড়ে উচ্চ-মানের সত্তার সম্প্রসারণের রূপকার। আমরা ইউরোপের কঠোর আর্থিক ঐতিহ্যের সাথে উদীয়মান এশীয় বাজারের গতিশীলতার সেতুবন্ধন করি।" },
+            zh: { label: "中文", title: "全球 <br> <span class='italic font-light text-[var(--champagne)]'>标准。</span>", desc: "构建跨大陆轴线的高保真实体扩张。我们将欧洲严谨的财政遗产与新兴亚洲市场的指数速度联系起来。" },
+            ja: { label: "日本語", title: "グローバル <br> <span class='italic font-light text-[var(--champagne)]'>スタンダード。</span>", desc: "大陸軸を越えた高精度エンティティの拡張を構築します。欧州の厳格な財政遺産と、台頭するアジア市場の加速度的なスピードを橋渡しします。" },
+            nl: { label: "Nederlands", title: "De Wereldwijde <br> <span class='italic font-light text-[var(--champagne)]'>Standaard.</span>", desc: "Architectuur voor de expansie van high-fidelity entiteiten over de transcontinentale as. Wij slaan de brug tussen het rigoureuze fiscale erfgoed van Europa en de exponentiële snelheid van opkomende Aziatische markten." }
+        };
+
+        function setLanguage(lang) {
+            const data = langData[lang] || langData.en;
+            document.getElementById('current-lang-label').innerText = data.label;
+            if(data.title) document.getElementById('hero-title').innerHTML = data.title;
+            if(data.desc) document.getElementById('hero-desc').innerText = data.desc;
+            toggleLangModal();
+        }
+    </script>
+</body>
+</html>
