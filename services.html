@@ -1,1 +1,534 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SERVICES | PARENT COMPANY</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Inter:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --obsidian: #0A0A0A;
+            --champagne: #D4C8B6;
+            --gold-dim: rgba(212, 200, 182, 0.12);
+            --gold-bright: rgba(212, 200, 182, 0.5);
+            --text-main: #ECECE7;
+        }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @media (pointer: fine) {
+            * { cursor: none !important; }
+            #cursor-shard, #cursor-tracer { display: block !important; }
+        }
+
+        body {
+            background-color: var(--obsidian);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .serif { font-family: 'Bodoni Moda', serif; }
+
+        /* --- SIGNATURE CURSOR --- */
+        #cursor-shard {
+            width: 2px; height: 20px;
+            background: var(--champagne);
+            position: fixed; pointer-events: none; z-index: 10000;
+            transition: height 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            display: none;
+        }
+        
+        #cursor-tracer {
+            width: 40px; height: 40px;
+            border: 1px solid var(--gold-dim);
+            position: fixed; pointer-events: none; z-index: 9999;
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            display: none;
+        }
+
+        .cursor-active #cursor-shard { height: 60px; background: #fff; }
+        .cursor-active #cursor-tracer { 
+            width: 80px; height: 80px; 
+            border-color: var(--champagne); 
+            border-width: 2px;
+            background: rgba(212, 200, 182, 0.05);
+        }
+
+        /* Noise Texture */
+        .noise {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9998; pointer-events: none; opacity: 0.05; mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .h-xl { font-size: clamp(3rem, 10vw, 12rem); line-height: 0.85; letter-spacing: -0.06em; }
+        .glass-panel {
+            background: rgba(15, 15, 15, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--gold-dim);
+            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .glass-panel:hover {
+            border-color: var(--gold-bright);
+            background: rgba(20, 20, 20, 0.6);
+        }
+
+        .reveal-up {
+            opacity: 0; transform: translateY(30px) scale(0.98);
+            filter: blur(8px);
+            transition: opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1), 
+                        transform 1.5s cubic-bezier(0.19, 1, 0.22, 1),
+                        filter 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .reveal-up.active { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+
+        .btn-luxury {
+            position: relative; padding: 1.2rem 3rem; font-size: 0.7rem;
+            letter-spacing: 0.4em; text-transform: uppercase; font-weight: 600;
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1), transform 0.1s ease-out;
+            border: 1px solid var(--gold-dim);
+            overflow: hidden;
+        }
+        .btn-luxury::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 200, 182, 0.2), transparent);
+            transition: 0.6s;
+        }
+        .btn-luxury:hover {
+            background: var(--champagne); color: var(--obsidian);
+            padding-left: 3.5rem; padding-right: 2.5rem;
+        }
+        .btn-luxury:hover::after { left: 100%; }
+
+        .agency-pillar {
+            border-bottom: 1px solid var(--gold-dim);
+            transition: background 0.6s ease;
+        }
+        @media (min-width: 1024px) {
+            .agency-pillar { border-bottom: none; border-right: 1px solid var(--gold-dim); }
+            .agency-pillar:last-child { border-right: none; }
+        }
+        .agency-pillar:hover {
+            background: rgba(212, 200, 182, 0.02);
+        }
+
+        .hero-mesh {
+            background: radial-gradient(circle at 50% 50%, rgba(212, 200, 182, 0.05) 0%, transparent 70%);
+            background-size: 200% 200%;
+            animation: mesh-drift 15s ease infinite;
+        }
+        @keyframes mesh-drift {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+        }
+    </style>
+</head>
+<body class="bg-[#0A0A0A] hero-mesh">
+
+    <div id="cursor-shard"></div>
+    <div id="cursor-tracer"></div>
+    <div class="noise"></div>
+
+    <!-- Floating Navigation -->
+    <nav id="main-nav" class="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[1000] glass-panel px-5 md:px-10 py-4 rounded-full flex justify-between items-center">
+        <a href="index.html" class="flex items-center gap-4 group">
+            <div class="w-8 h-8 border border-[var(--champagne)] flex items-center justify-center rotate-45 group-hover:bg-[var(--champagne)] transition-all">
+                <span class="rotate-[-45deg] text-[8px] font-bold group-hover:text-black">P/C</span>
+            </div>
+            <span id="nav-brand" class="text-[10px] tracking-[0.8em] font-bold uppercase text-white hidden sm:block">Parent Company</span>
+        </a>
+
+        <div class="flex items-center gap-8">
+            <a href="index.html" id="nav-home" class="text-[8px] tracking-[0.4em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Home</a>
+            <a href="contact.html" id="nav-contact" class="text-[8px] tracking-[0.4em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Contact</a>
+            <button onclick="toggleMobileMenu()" class="md:hidden flex flex-col gap-1.5 p-2">
+                <div class="w-5 h-[1px] bg-[var(--champagne)]"></div>
+                <div class="w-5 h-[1px] bg-[var(--champagne)]"></div>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="pt-48 pb-20 px-8 md:px-24 lg:px-32 relative border-b border-white/5">
+        <div class="max-w-7xl mx-auto">
+            <p id="services-hero-label" class="text-[10px] tracking-[0.8em] uppercase text-[var(--champagne)] mb-8 reveal-up">Synthesis of Excellence</p>
+            <h1 id="services-hero-title" class="h-xl serif mb-12 reveal-up delay-100">Service <br> <span class="italic text-[var(--champagne)]">Architecture.</span></h1>
+            <p id="services-hero-desc" class="max-w-2xl text-white/40 p-luxury leading-relaxed reveal-up delay-200">
+                A three-tier agency ecosystem designed to construct, vocalize, and immortalize premium entities across transcontinental markets.
+            </p>
+        </div>
+    </header>
+
+    <main>
+        <!-- Agency Pillars Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 min-h-screen">
+            
+            <!-- Agency Alpha -->
+            <div class="agency-pillar p-8 md:p-16 lg:p-20 space-y-12 reveal-up">
+                <div>
+                    <span id="tier-01-label" class="text-[var(--champagne)] text-xs tracking-[0.5em] uppercase block mb-4">Tier 01 / Nexus</span>
+                    <h2 id="tier-01-title" class="text-4xl md:text-5xl serif italic mb-6">Agency Alpha: <br> The Architect</h2>
+                    <p id="tier-01-desc" class="text-white/40 text-sm leading-relaxed italic">The "Brain." Defining the DNA, legal framework, and technical infrastructure of the holding.</p>
+                </div>
+
+                <div class="space-y-10">
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)]">Brand DNA & Identity</h4>
+                        <ul class="space-y-3 text-sm text-white/60 font-light">
+                            <li>• Strategic Naming & Linguistic Audits</li>
+                            <li>• The Brand Bible: Structural Guidelines</li>
+                            <li>• Voice & Tone Architecture</li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)]">Business & Legal</h4>
+                        <ul class="space-y-3 text-sm text-white/60 font-light">
+                            <li>• 12-Month Strategic Growth Roadmaps</li>
+                            <li>• GDPR & Global Privacy Frameworks</li>
+                            <li>• Professional Risk & IP Audits</li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)]">Technical Infrastructure</h4>
+                        <ul class="space-y-3 text-sm text-white/60 font-light">
+                            <li>• High-end React/Next.js Web Platforms</li>
+                            <li>• UI/UX Interface Architecture</li>
+                            <li>• Cloud Ecosystem Deployment</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agency Gamma -->
+            <div class="agency-pillar p-8 md:p-16 lg:p-20 space-y-12 bg-white/5 reveal-up delay-150">
+                <div>
+                    <span id="tier-02-label" class="text-[var(--champagne)] text-xs tracking-[0.5em] uppercase block mb-4">Tier 02 / Vision</span>
+                    <h2 id="tier-02-title" class="text-4xl md:text-5xl serif italic mb-6">Agency Gamma: <br> The Soul</h2>
+                    <p id="tier-02-desc" class="text-white/40 text-sm leading-relaxed italic">The "Vision." Crafting the multimedia immersion and high-fidelity aesthetics of the brand.</p>
+                </div>
+
+                <div class="space-y-10">
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)]">3D & Industrial Design</h4>
+                        <ul class="space-y-3 text-sm text-white/60 font-light">
+                            <li>• High-Fidelity Product Visualization</li>
+                            <li>• Immersive Virtual Showrooms</li>
+                            <li>• Digital Blueprints & Packaging</li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)]">Multimedia Production</h4>
+                        <ul class="space-y-3 text-sm text-white/60 font-light">
+                            <li>• Cinematic Ad Editing & Motion</li>
+                            <li>• AI-Enhanced Lifestyle Imagery</li>
+                            <li>• Social Media Grid Curation</li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)]">Immersive Tech</h4>
+                        <ul class="space-y-3 text-sm text-white/60 font-light">
+                            <li>• Luxury Web Animations</li>
+                            <li>• Motion Design Transitions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agency Beta -->
+            <div class="agency-pillar p-8 md:p-16 lg:p-20 space-y-12 reveal-up delay-300">
+                <div>
+                    <span id="tier-03-label" class="text-[var(--champagne)] text-xs tracking-[0.5em] uppercase block mb-4">Tier 03 / Engine</span>
+                    <h2 id="tier-03-title" class="text-4xl md:text-5xl serif italic mb-6">Agency Beta: <br> The Voice</h2>
+                    <p id="tier-03-desc" class="text-white/40 text-sm leading-relaxed italic">The "Engine." Driving revenue, market entry, and transcontinental public perception.</p>
+                </div>
+
+                <div class="space-y-10">
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)]">Market Entry & PR</h4>
+                        <ul class="space-y-3 text-sm text-white/60 font-light">
+                            <li>• Asia-to-EU Expansion Strategy</li>
+                            <li>• Digital PR & Media Relations</li>
+                            <li>• B2B Sales Enablement & Pitching</li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)]">Growth Marketing</h4>
+                        <ul class="space-y-3 text-sm text-white/60 font-light">
+                            <li>• Performance Ad Management</li>
+                            <li>• High-end Influencer Brokerage</li>
+                            <li>• Automated CRM Customer Journeys</li>
+                        </ul>
+                    </div>
+
+                    <div class="space-y-4">
+                        <h4 class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)]">Optimisation</h4>
+                        <ul class="space-y-3 text-sm text-white/60 font-light">
+                            <li>• Conversion Rate Optimization (CRO)</li>
+                            <li>• Continuous Market Trend Research</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Synergy Section -->
+        <section class="py-32 md:py-64 bg-white text-black px-8 md:px-24 lg:px-32">
+            <div class="max-w-7xl mx-auto flex flex-col items-center text-center">
+                <h3 id="synergy-label" class="text-[10px] tracking-[0.8em] uppercase text-black/40 mb-12 reveal-up">The Synergy Model</h3>
+                <h2 id="synergy-title" class="text-5xl md:text-8xl serif mb-20 reveal-up">Integrated <br> <span class="italic font-light">Expansion.</span></h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-left w-full mt-12 reveal-up">
+                    <div class="p-8 border border-black/10">
+                        <span class="serif text-4xl italic block mb-6">01.</span>
+                        <p class="text-sm uppercase tracking-widest font-bold mb-4">Alpha Foundations</p>
+                        <p class="text-black/60 text-sm leading-relaxed">Constructing the legal and technical bedrock. The "Godly" site and Brand Bible established.</p>
+                    </div>
+                    <div class="p-8 border border-black/10">
+                        <span class="serif text-4xl italic block mb-6">02.</span>
+                        <p class="text-sm uppercase tracking-widest font-bold mb-4">Gamma Aesthetics</p>
+                        <p class="text-black/60 text-sm leading-relaxed">Creating visual assets—from 3D car renders to cinematic advertisements that define status.</p>
+                    </div>
+                    <div class="p-8 border border-black/10">
+                        <span class="serif text-4xl italic block mb-6">03.</span>
+                        <p class="text-sm uppercase tracking-widest font-bold mb-4">Beta Velocity</p>
+                        <p class="text-black/60 text-sm leading-relaxed">Launching into the European or Asian markets, managing performance ads and scaling revenue.</p>
+                    </div>
+                </div>
+
+                <div class="mt-24 reveal-up">
+                    <a href="contact.html" id="synergy-cta" class="btn-luxury inline-block border-black/20 hover:border-black">Begin Architecture</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-black py-20 md:py-40 px-8 md:px-24 lg:px-32 border-t border-white/5">
+        <div class="max-w-[140rem] mx-auto grid grid-cols-1 lg:grid-cols-4 gap-20">
+            <div class="col-span-1 lg:col-span-2 space-y-12">
+                <div class="flex items-center gap-6">
+                    <div class="w-10 h-10 border border-[var(--champagne)] flex items-center justify-center rotate-45">
+                        <span class="rotate-[-45deg] text-[10px] font-bold text-white">P/C</span>
+                    </div>
+                    <h4 class="text-xl tracking-[1.2em] uppercase font-bold text-white">Parent Company</h4>
+                </div>
+                <p id="footer-desc" class="p-luxury text-white/20 max-w-sm">High-fidelity business architecture for the 2026 transcontinental economic era. All rights reserved.</p>
+            </div>
+            <div class="flex flex-col justify-between lg:items-end text-left lg:text-right col-span-1 lg:col-span-2">
+                <div class="space-y-4">
+                    <p id="footer-legal-label" class="action-text text-white/20 uppercase">Legal</p>
+                    <div class="space-y-2 text-[10px] tracking-[0.4em] uppercase text-white/40">
+                        <a href="javascript:void(0)" onclick="openLegal('privacy')" id="footer-privacy" class="block hover:text-white transition-colors">Privacy Protocol</a>
+                        <a href="javascript:void(0)" onclick="openLegal('charter')" id="footer-charter" class="block hover:text-white transition-colors">Holding Charter</a>
+                    </div>
+                </div>
+                <p id="footer-copyright" class="text-[9px] tracking-[0.6em] text-white/20 mt-20 uppercase">© 2026 PARENT COMPANY HOLDING. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Legal Overlay (Same as Index for Consistency) -->
+    <div id="legal-overlay" class="fixed inset-0 z-[2000] bg-[#0c0c0c]/98 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-1000 flex flex-col items-center">
+        <div class="w-full max-w-7xl px-8 pt-12 md:pt-20 pb-8 flex justify-between items-end">
+            <div>
+                <p id="legal-overlay-label" class="action-text text-[10px] opacity-40 uppercase mb-2">Legal Document</p>
+                <h2 id="legal-overlay-title" class="text-4xl md:text-6xl serif italic text-white"></h2>
+            </div>
+            <button onclick="closeLegal()" class="flex flex-col items-center gap-2 text-[var(--champagne)] opacity-40 hover:opacity-100 transition-opacity">
+                <i data-lucide="x" class="w-6 h-6 md:w-12 md:h-12 font-thin"></i>
+                <span class="text-[8px] tracking-[0.5em] hidden md:block">CLOSE</span>
+            </button>
+        </div>
+        <div class="w-full max-w-3xl px-8 py-20 flex-grow flex items-center">
+            <p id="legal-overlay-content" class="p-luxury text-white/60 leading-relaxed text-center md:text-left"></p>
+        </div>
+    </div>
+
+    <!-- Language Overlay (Same as Index for Consistency) -->
+    <div id="lang-overlay" class="fixed inset-0 z-[2000] bg-[#0c0c0c]/98 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-1000 flex flex-col items-center">
+        <div class="w-full max-w-7xl px-8 pt-12 md:pt-20 pb-8 flex justify-between items-end">
+            <div>
+                <p class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)] mb-2">Region Selection</p>
+                <h2 class="text-4xl md:text-6xl serif italic text-white">Universal <span class="text-[var(--champagne)]">Access</span></h2>
+            </div>
+            <button onclick="toggleLangModal()" class="flex flex-col items-center gap-2 text-[var(--champagne)] opacity-40 hover:opacity-100 transition-opacity">
+                <i data-lucide="x" class="w-6 h-6 md:w-12 md:h-12 font-thin"></i>
+                <span class="text-[8px] tracking-[0.5em] hidden md:block">CLOSE</span>
+            </button>
+        </div>
+        <div class="w-full max-w-7xl px-8 pb-20 overflow-y-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
+                <div class="space-y-4 flex flex-col">
+                    <button onclick="setLanguage('en')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">English</button>
+                    <button onclick="setLanguage('bn')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">বাংলা</button>
+                    <button onclick="setLanguage('zh')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">中文</button>
+                </div>
+                <div class="space-y-4 flex flex-col">
+                    <button onclick="setLanguage('ar')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">العربية</button>
+                    <button onclick="setLanguage('ko')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">한국어</button>
+                    <button onclick="setLanguage('hi')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">हिन्दी</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // --- SIGNATURE CURSOR ---
+        const shard = document.getElementById('cursor-shard');
+        const tracer = document.getElementById('cursor-tracer');
+        let mouseX = 0, mouseY = 0;
+        let shardX = 0, shardY = 0;
+        let tracerX = 0, tracerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            shardX += (mouseX - shardX) * 0.15;
+            shardY += (mouseY - shardY) * 0.15;
+            tracerX += (mouseX - tracerX) * 0.08;
+            tracerY += (mouseY - tracerY) * 0.08;
+
+            shard.style.left = shardX + 'px';
+            shard.style.top = shardY + 'px';
+            tracer.style.left = tracerX + 'px';
+            tracer.style.top = tracerY + 'px';
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // --- MAGNETIC BUTTONS ---
+        document.querySelectorAll('.btn-luxury').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = (e.clientX - rect.left - rect.width / 2) * 0.2;
+                const y = (e.clientY - rect.top - rect.height / 2) * 0.3;
+                btn.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = `translate3d(0, 0, 0)`;
+            });
+        });
+
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-active'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-active'));
+        });
+
+        // --- REVEAL OBSERVER ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+
+        // --- MODAL CONTROLS ---
+        function toggleLangModal() {
+            const modal = document.getElementById('lang-overlay');
+            const isActive = modal.classList.contains('opacity-100');
+            modal.classList.toggle('opacity-100', !isActive);
+            modal.classList.toggle('pointer-events-auto', !isActive);
+            modal.classList.toggle('opacity-0', isActive);
+            modal.classList.toggle('pointer-events-none', isActive);
+            document.body.style.overflow = isActive ? 'auto' : 'hidden';
+        }
+
+        function openLegal(type) {
+            const modal = document.getElementById('legal-overlay');
+            const title = document.getElementById('legal-overlay-title');
+            const content = document.getElementById('legal-overlay-content');
+            
+            if (type === 'privacy') {
+                title.innerHTML = "Privacy <span class='text-[var(--champagne)]'>Protocol</span>";
+                content.innerHTML = "The Parent Company Privacy Protocol (PCP-2026) defines our structural approach to data sovereignty across transcontinental corridors. We treat information as a tangible asset, protected by high-fidelity encryption and decentralized governance.";
+            } else {
+                title.innerHTML = "Holding <span class='text-[var(--champagne)]'>Charter</span>";
+                content.innerHTML = "The Holding Charter is the governing mandate of Parent Company, establishing the protocols for transcontinental capital synthesis and entity expansion. We operate at the intersection of European fiscal heritage and Asian market velocity.";
+            }
+            
+            modal.classList.replace('opacity-0', 'opacity-100');
+            modal.classList.replace('pointer-events-none', 'pointer-events-auto');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLegal() {
+            const modal = document.getElementById('legal-overlay');
+            modal.classList.replace('opacity-100', 'opacity-0');
+            modal.classList.replace('pointer-events-auto', 'pointer-events-none');
+            document.body.style.overflow = 'auto';
+        }
+
+        const langData = {
+            en: {
+                "nav-brand": "Parent Company", "nav-home": "Home", "nav-contact": "Contact",
+                "services-hero-label": "Synthesis of Excellence",
+                "services-hero-title": "Service <br> <span class='italic text-[var(--champagne)]'>Architecture.</span>",
+                "services-hero-desc": "A three-tier agency ecosystem designed to construct, vocalize, and immortalize premium entities across transcontinental markets.",
+                "tier-01-label": "Tier 01 / Nexus", "tier-01-title": "Agency Alpha: <br> The Architect", "tier-01-desc": "The 'Brain.' Defining the DNA, legal framework, and technical infrastructure of the holding.",
+                "tier-02-label": "Tier 02 / Vision", "tier-02-title": "Agency Gamma: <br> The Soul", "tier-02-desc": "The 'Vision.' Crafting the multimedia immersion and high-fidelity aesthetics of the brand.",
+                "tier-03-label": "Tier 03 / Engine", "tier-03-title": "Agency Beta: <br> The Voice", "tier-03-desc": "The 'Engine.' Driving revenue, market entry, and transcontinental public perception.",
+                "synergy-label": "The Synergy Model", "synergy-title": "Integrated <br> <span class='italic font-light'>Expansion.</span>", "synergy-cta": "Begin Architecture",
+                "footer-desc": "High-fidelity business architecture for the 2026 transcontinental economic era. All rights reserved."
+            },
+            bn: {
+                "nav-brand": "প্যারেন্ট কোম্পানি", "nav-home": "হোম", "nav-contact": "যোগাযোগ",
+                "services-hero-label": "উৎকর্ষের সংশ্লেষণ",
+                "services-hero-title": "পরিষেবা <br> <span class='italic text-[var(--champagne)]'>স্থাপত্য।</span>",
+                "services-hero-desc": "একটি ত্রি-স্তরীয় এজেন্সি ইকোসিস্টেম যা আন্তঃমহাদেশীয় বাজারে প্রিমিয়াম সত্তা নির্মাণ, প্রকাশ এবং অমর করার জন্য ডিজাইন করা হয়েছে।",
+                "tier-01-label": "স্তর ০১ / নেক্সাস", "tier-01-title": "এজেন্সি আলফা: <br> স্থপতি", "tier-01-desc": "'মস্তিষ্ক।' হোল্ডিংয়ের ডিএনএ, আইনি কাঠামো এবং প্রযুক্তিগত অবকাঠামো সংজ্ঞায়িত করা।",
+                "tier-02-label": "স্তর ০২ / ভিশন", "tier-02-title": "এজেন্সি গামা: <br> আত্মা", "tier-02-desc": "'ভিশন।' ব্র্যান্ডের মাল্টিমিডিয়া নিমজ্জন এবং উচ্চ-মানের নান্দনিকতা তৈরি করা।",
+                "tier-03-label": "স্তর ০৩ / ইঞ্জিন", "tier-03-title": "এজেন্সি বিটা: <br> কণ্ঠস্বর", "tier-03-desc": "'ইঞ্জিন।' রাজস্ব বৃদ্ধি, বাজারে প্রবেশ এবং আন্তঃমহাদেশীয় জনমত পরিচালনা করা।",
+                "synergy-label": "সিনারজি মডেল", "synergy-title": "সমন্বিত <br> <span class='italic font-light'>সম্প্রসারণ।</span>", "synergy-cta": "স্থাপত্য শুরু করুন",
+                "footer-desc": "২০২৬ আন্তঃমহাদেশীয় অর্থনৈতিক যুগের জন্য হাই-ফিডেলিটি ব্যবসা স্থাপত্য। সর্বস্বত্ব সংরক্ষিত।"
+            }
+        };
+
+        function setLanguage(lang) {
+            localStorage.setItem('pc_lang', lang);
+            const data = langData[lang] || langData.en;
+            Object.keys(data).forEach(key => {
+                const el = document.getElementById(key);
+                if (el) {
+                    if (key.includes('title') || key.includes('desc')) el.innerHTML = data[key];
+                    else el.innerText = data[key];
+                }
+            });
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            if (document.getElementById('lang-overlay').classList.contains('opacity-100')) {
+                toggleLangModal();
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('pc_lang') || 'en';
+            if (savedLang !== 'en') setLanguage(savedLang);
+        });
+
+        function toggleMobileMenu() {
+            // Mobile nav can be further developed here or handled via index logic
+            alert("Navigation Control Engaged");
+        }
+    </script>
+</body>
+</html>
