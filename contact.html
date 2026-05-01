@@ -64,7 +64,7 @@
         /* Noise Texture */
         .noise {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9998; pointer-events: none; opacity: 0.05; mix-blend-mode: overlay;
+            z-index: 50; pointer-events: none; opacity: 0.05; mix-blend-mode: overlay;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
@@ -79,11 +79,11 @@
 
         /* Header Animation Classes */
         .nav-hidden {
-            transform: translate(-50%, -150%);
+            transform: translate3d(-50%, -150%, 0) !important;
             opacity: 0;
         }
         .nav-visible {
-            transform: translate(-50%, 0);
+            transform: translate3d(-50%, 0, 0) !important;
             opacity: 1;
         }
 
@@ -157,20 +157,35 @@
 
     <!-- Floating Navigation -->
     <nav id="main-nav" class="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[1000] glass-panel px-5 md:px-10 py-4 rounded-full flex justify-between items-center nav-visible">
-        <a href="index.html" class="flex items-center gap-4 group">
+        <a href="index.html" class="flex items-center gap-4 group transition-all shrink-0">
             <div class="w-8 h-8 border border-[var(--champagne)] flex items-center justify-center rotate-45 group-hover:bg-[var(--champagne)] transition-all">
                 <span class="rotate-[-45deg] text-[8px] font-bold group-hover:text-black">P/C</span>
             </div>
-            <span id="nav-brand" class="text-[10px] tracking-[0.8em] font-bold uppercase text-white hidden sm:block">Parent Company</span>
+            <div>
+                <span id="nav-brand" class="text-[10px] tracking-[0.8em] font-bold uppercase text-white block leading-none">Parent Company</span>
+                <span class="text-[8px] tracking-[0.4em] text-[var(--champagne)] uppercase mt-1 block opacity-80">Est. 2026</span>
+            </div>
         </a>
 
-        <div class="flex items-center gap-8">
-            <a href="index.html" id="nav-home" class="text-[8px] tracking-[0.4em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Home</a>
-            <a href="services.html" id="nav-services" class="text-[8px] tracking-[0.4em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Services</a>
-            <button onclick="toggleMobileMenu()" class="md:hidden flex flex-col gap-1.5 p-2">
-                <div id="bar1" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
-                <div id="bar2" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
-            </button>
+        <div class="flex items-center gap-4 md:gap-10">
+            <div class="hidden md:flex items-center gap-4 lg:gap-8">
+                <a href="index.html" id="nav-home" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Home</a>
+                <a href="services.html" id="nav-services" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Services</a>
+            </div>
+            
+            <div class="w-px h-6 bg-white/10 hidden sm:block"></div>
+            
+            <div class="flex items-center gap-4 md:gap-8">
+                <button onclick="toggleLangModal()" class="flex items-center gap-2 group transition-all shrink-0">
+                    <i data-lucide="globe" class="w-4 h-4 text-[var(--champagne)]"></i>
+                    <span id="current-lang-label" class="text-[8px] tracking-[0.3em] uppercase text-[var(--champagne)] hidden md:inline">English</span>
+                </button>
+                
+                <button onclick="toggleMobileMenu()" class="md:hidden flex flex-col gap-1.5 p-2 shrink-0">
+                    <div id="bar1" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
+                    <div id="bar2" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
+                </button>
+            </div>
         </div>
     </nav>
 
@@ -178,13 +193,13 @@
     <div id="mobile-menu" class="fixed inset-0 z-[1500] bg-[#0A0A0A] flex flex-col justify-center items-center md:hidden">
         <div class="space-y-12 text-center">
             <div class="mobile-link delay-100">
-                <a href="index.html" onclick="toggleMobileMenu()" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Home</a>
+                <a href="index.html" onclick="toggleMobileMenu()" id="mobile-nav-home" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Home</a>
             </div>
             <div class="mobile-link delay-200">
-                <a href="services.html" onclick="toggleMobileMenu()" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Services</a>
+                <a href="services.html" onclick="toggleMobileMenu()" id="mobile-nav-services" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Services</a>
             </div>
             <div class="mobile-link delay-300">
-                <button onclick="toggleMobileMenu()" class="text-xs tracking-[0.6em] uppercase text-white/40 hover:text-[var(--champagne)] transition-colors mt-8">Back</button>
+                <button onclick="toggleMobileMenu()" id="mobile-nav-back" class="text-xs tracking-[0.6em] uppercase text-white/40 hover:text-[var(--champagne)] transition-colors mt-8">Back</button>
             </div>
             <div class="mobile-link delay-[400ms] pt-12">
                 <p class="text-[8px] tracking-[0.8em] text-white/20 uppercase">Est. 2026</p>
@@ -473,7 +488,8 @@
 
         const langData = {
             en: {
-                "nav-brand": "Parent Company", "nav-home": "Home", "nav-services": "Services",
+                "label": "English",
+                "nav-brand": "Parent Company", "nav-home": "Home", "nav-home": "Home", "nav-services": "Services",
                 "contact-hero-label": "Direct Correspondence",
                 "contact-hero-title": "Contact <br> <span class='italic text-[var(--champagne)]'>Architecture.</span>",
                 "contact-hero-desc": "Initiate a dialogue. Our transcontinental presence is managed through high-fidelity digital channels, ensuring secure and immediate access to our strategic nodes.",
@@ -481,10 +497,12 @@
                 "contact-status-label": "Digital Concierge Active", "contact-status-desc": "Responses are typically architected within one business cycle (24h).",
                 "contact-nodes-label": "Strategic Nodes",
                 "contact-disclaimer": "Parent Company operates as a distributed entity. No physical headquarters are required for global synthesis.",
-                "footer-desc": "High-fidelity business architecture for the 2026 transcontinental economic era. All rights reserved."
+                "footer-desc": "High-fidelity business architecture for the 2026 transcontinental economic era. All rights reserved.",
+                "mobile-nav-home": "Home", "mobile-nav-services": "Services", "mobile-nav-back": "Back"
             },
             bn: {
-                "nav-brand": "প্যারেন্ট কোম্পানি", "nav-home": "হোম", "nav-services": "পরিষেবা",
+                "label": "বাংলা",
+                "nav-brand": "প্যারেন্ট কোম্পানি", "nav-home": "মূলপাতা", "nav-services": "পরিষেবা",
                 "contact-hero-label": "সরাসরি যোগাযোগ",
                 "contact-hero-title": "যোগাযোগ <br> <span class='italic text-[var(--champagne)]'>স্থাপত্য।</span>",
                 "contact-hero-desc": "একটি সংলাপ শুরু করুন। আমাদের আন্তঃমহাদেশীয় উপস্থিতি উচ্চ-মানের ডিজিটাল চ্যানেলের মাধ্যমে পরিচালিত হয়।",
@@ -492,13 +510,16 @@
                 "contact-status-label": "ডিজিটাল কনসিয়ারজ সক্রিয়", "contact-status-desc": "প্রতিক্রিয়া সাধারণত ২৪ ঘণ্টার মধ্যে প্রদান করা হয়।",
                 "contact-nodes-label": "কৌশলগত নোড",
                 "contact-disclaimer": "প্যারেন্ট কোম্পানি একটি বিতরণ করা সত্তা হিসাবে কাজ করে।",
-                "footer-desc": "২০২৬ আন্তঃমহাদেশীয় অর্থনৈতিক যুগের জন্য হাই-ফিডেলিটি ব্যবসা স্থাপত্য। সর্বস্বত্ব সংরক্ষিত।"
+                "footer-desc": "২০২৬ আন্তঃমহাদেশীয় অর্থনৈতিক যুগের জন্য হাই-ফিডেলিটি ব্যবসা স্থাপত্য। সর্বস্বত্ব সংরক্ষিত।",
+                "mobile-nav-home": "মূলপাতা", "mobile-nav-services": "পরিষেবা", "mobile-nav-back": "ফিরুন"
             }
         };
 
         function setLanguage(lang) {
             localStorage.setItem('pc_lang', lang);
             const data = langData[lang] || langData.en;
+            if (data.label) document.getElementById('current-lang-label').innerText = data.label;
+
             Object.keys(data).forEach(key => {
                 const el = document.getElementById(key);
                 if (el) {
