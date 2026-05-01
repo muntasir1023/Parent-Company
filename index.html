@@ -69,7 +69,7 @@
         .noise {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9998;
+            z-index: 50;
             pointer-events: none;
             opacity: 0.05;
             mix-blend-mode: overlay;
@@ -77,7 +77,7 @@
         }
 
         /* Typography Scailing */
-        .h-xl { font-size: clamp(3.2rem, 12vw, 18rem); line-height: 1.1; letter-spacing: -0.06em; }
+        .h-xl { font-size: clamp(2.5rem, 12vw, 18rem); line-height: 1.1; letter-spacing: -0.06em; }
         @media (min-width: 768px) { .h-xl { line-height: 0.85; } }
         .p-luxury { font-size: clamp(1rem, 1.4vw, 1.3rem); font-weight: 300; letter-spacing: 0.02em; }
 
@@ -96,11 +96,11 @@
 
         /* Header Animation Classes */
         .nav-hidden {
-            transform: translate(-50%, -150%);
+            transform: translate3d(-50%, -150%, 0) !important;
             opacity: 0;
         }
         .nav-visible {
-            transform: translate(-50%, 0);
+            transform: translate3d(-50%, 0, 0) !important;
             opacity: 1;
         }
 
@@ -278,7 +278,7 @@
 
     <!-- Floating Navigation -->
     <nav id="main-nav" class="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[1000] glass-panel px-5 md:px-10 py-4 rounded-full flex justify-between items-center nav-visible">
-        <div class="flex items-center gap-4">
+        <a href="index.html" class="flex items-center gap-4 group transition-all">
             <div class="w-8 h-8 border border-[var(--champagne)] flex items-center justify-center rotate-45">
                 <span class="rotate-[-45deg] text-[8px] font-bold">P/C</span>
             </div>
@@ -286,7 +286,7 @@
                 <span class="text-[10px] tracking-[0.8em] font-bold uppercase text-white block leading-none">Parent Company</span>
                 <span class="text-[8px] tracking-[0.4em] text-[var(--champagne)] uppercase mt-1 block opacity-80">Est. 2026</span>
             </div>
-        </div>
+        </a>
 
         <!-- Integrated Header Actions -->
         <div class="flex items-center gap-4 md:gap-10">
@@ -297,9 +297,10 @@
             
             <div class="w-px h-6 bg-white/10 hidden sm:block"></div>
             
-            <div class="flex items-center gap-4 md:gap-8">
-                <button onclick="toggleLangModal()" class="flex items-center gap-2 group transition-all">
-                    <i data-lucide="globe" class="w-4 h-4 text-[var(--champagne)]"></i>
+            <div class="flex items-center gap-4 md:gap-8 shrink-0">
+                <!-- Language Selection -->
+                <button onclick="toggleLangModal()" class="hidden md:flex items-center gap-2 group transition-all">
+                    <i data-lucide="languages" class="w-4 h-4 text-[var(--champagne)]"></i>
                     <span id="current-lang-label" class="text-[8px] tracking-[0.3em] uppercase text-[var(--champagne)] hidden md:inline">English</span>
                 </button>
                 
@@ -320,6 +321,12 @@
             </div>
             <div class="mobile-link delay-200">
                 <a href="contact.html" onclick="toggleMobileMenu()" id="mobile-nav-contact" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Contact</a>
+            </div>
+            <div class="mobile-link delay-250">
+                <button onclick="toggleMobileMenu(); toggleLangModal();" id="mobile-nav-lang" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors flex items-center gap-4">
+                    <i data-lucide="languages" class="w-8 h-8 opacity-40"></i>
+                    <span id="mobile-lang-label">English</span>
+                </button>
             </div>
             <div class="mobile-link delay-300">
                 <button onclick="toggleMobileMenu()" id="mobile-nav-back" class="text-xs tracking-[0.6em] uppercase text-white/40 hover:text-[var(--champagne)] transition-colors mt-8">Back</button>
@@ -761,6 +768,7 @@
                 cta_hero: "Explore Architecture",
                 cta_services: "View Full Service Architecture",
                 contact_cta_text: "Contact Us",
+                mobile_lang_label: "English",
                 nav_services: "Services",
                 nav_contact: "Contact",
                 lang_overlay_label: "Region Selection",
@@ -807,6 +815,7 @@
                 cta_hero: "আর্কিটেকচার অন্বেষণ করুন",
                 cta_services: "সম্পূর্ণ পরিষেবা আর্কিটেকচার দেখুন",
                 nav_services: "পরিষেবা",
+                mobile_lang_label: "বাংলা",
                 nav_contact: "যোগাযোগ",
                 lang_overlay_label: "অঞ্চল নির্বাচন",
                 lang_overlay_title: "সর্বজনীন <span class='text-[var(--champagne)]'>অ্যাক্সেস</span>",
@@ -852,6 +861,7 @@
                 cta_hero: "探索建筑",
                 cta_services: "查看完整服务架构",
                 nav_services: "服务",
+                mobile_lang_label: "中文",
                 nav_contact: "联系我们",
                 lang_overlay_label: "区域选择",
                 lang_overlay_title: "全球 <span class='text-[var(--champagne)]'>访问</span>",
@@ -897,6 +907,7 @@
                 cta_hero: "アーキテクチャを探索する",
                 cta_services: "フルサービス・アーキテクチャを表示",
                 nav_services: "サービス",
+                mobile_lang_label: "日本語",
                 nav_contact: "お問い合わせ",
                 lang_overlay_label: "地域選択",
                 lang_overlay_title: "ユニバーサル <span class='text-[var(--champagne)]'>アクセス</span>",
@@ -942,6 +953,7 @@
                 cta_hero: "Verken Architectuur",
                 cta_services: "Bekijk Volledige Service Architectuur",
                 nav_services: "Diensten",
+                mobile_lang_label: "Nederlands",
                 nav_contact: "Contact",
                 lang_overlay_label: "Regioselectie",
                 lang_overlay_title: "Universele <span class='text-[var(--champagne)]'>Toegang</span>",
@@ -987,6 +999,7 @@
                 cta_hero: "아키텍처 탐색",
                 cta_services: "전체 서비스 아키텍처 보기",
                 nav_services: "서비스",
+                mobile_lang_label: "한국어",
                 nav_contact: "문의하기",
                 lang_overlay_label: "지역 선택",
                 lang_overlay_title: "유니버설 <span class='text-[var(--champagne)]'>액세스</span>",
@@ -1032,6 +1045,7 @@
                 cta_hero: "वास्तुकला का अन्वेषण करें",
                 cta_services: "पूर्ण सेवा वास्तुकला देखें",
                 nav_services: "सेवाएं",
+                mobile_lang_label: "हिन्दी",
                 nav_contact: "संपर्क",
                 lang_overlay_label: "क्षेत्र चयन",
                 lang_overlay_title: "सार्वभौमिक <span class='text-[var(--champagne)]'>पहुंच</span>",
@@ -1077,6 +1091,7 @@
                 cta_hero: "استكشف الهندسة",
                 cta_services: "عرض هندسة الخدمات الكاملة",
                 nav_services: "الخدمات",
+                mobile_lang_label: "العربية",
                 nav_contact: "اتصل بنا",
                 lang_overlay_label: "اختيار المنطقة",
                 lang_overlay_title: "وصول <span class='text-[var(--champagne)]'>عالمي</span>",
@@ -1121,8 +1136,11 @@
             window.currentLangCode = lang;
             const data = langData[lang] || langData.en;
             
-            // Update Label
-            document.getElementById('current-lang-label').innerText = data.label;
+            // Update current language label in main nav
+            if (document.getElementById('current-lang-label')) document.getElementById('current-lang-label').innerText = data.label;
+            // Update language label in mobile menu
+            const mobileLangLabelEl = document.getElementById('mobile-lang-label');
+            if (mobileLangLabelEl) mobileLangLabelEl.innerText = data.label;
 
             // RTL Handling for Arabic
             document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
@@ -1155,7 +1173,10 @@
             if(data.nav_services) document.getElementById('mobile-nav-services').innerText = data.nav_services;
             if(data.nav_contact) document.getElementById('mobile-nav-contact').innerText = data.nav_contact;
 
-            toggleLangModal();
+            const modal = document.getElementById('lang-overlay');
+            if (modal && modal.classList.contains('opacity-100')) {
+                toggleLangModal();
+            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
