@@ -68,7 +68,7 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        .h-xl { font-size: clamp(3rem, 10vw, 12rem); line-height: 0.85; letter-spacing: -0.06em; }
+        .h-xl { font-size: clamp(2.5rem, 10vw, 12rem); line-height: 0.85; letter-spacing: -0.06em; }
         .glass-panel {
             background: rgba(15, 15, 15, 0.4);
             backdrop-filter: blur(24px);
@@ -156,12 +156,12 @@
     <div class="noise"></div>
 
     <!-- Floating Navigation -->
-    <nav id="main-nav" class="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[1000] glass-panel px-5 md:px-10 py-4 rounded-full flex justify-between items-center nav-visible">
+    <nav id="main-nav" class="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[1000] glass-panel px-4 md:px-10 py-3 md:py-4 rounded-full flex justify-between items-center nav-visible">
         <a href="index.html" class="flex items-center gap-4 group transition-all shrink-0">
             <div class="w-8 h-8 border border-[var(--champagne)] flex items-center justify-center rotate-45 group-hover:bg-[var(--champagne)] transition-all">
                 <span class="rotate-[-45deg] text-[8px] font-bold group-hover:text-black">P/C</span>
             </div>
-            <div>
+            <div class="shrink-0">
                 <span id="nav-brand" class="text-[10px] tracking-[0.8em] font-bold uppercase text-white block leading-none">Parent Company</span>
                 <span class="text-[8px] tracking-[0.4em] text-[var(--champagne)] uppercase mt-1 block opacity-80">Est. 2026</span>
             </div>
@@ -176,11 +176,6 @@
             <div class="w-px h-6 bg-white/10 hidden sm:block"></div>
             
             <div class="flex items-center gap-4 md:gap-8">
-                <button onclick="toggleLangModal()" class="flex items-center gap-2 group transition-all shrink-0">
-                    <i data-lucide="globe" class="w-4 h-4 text-[var(--champagne)]"></i>
-                    <span id="current-lang-label" class="text-[8px] tracking-[0.3em] uppercase text-[var(--champagne)] hidden md:inline">English</span>
-                </button>
-                
                 <button onclick="toggleMobileMenu()" class="md:hidden flex flex-col gap-1.5 p-2 shrink-0">
                     <div id="bar1" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
                     <div id="bar2" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
@@ -345,34 +340,6 @@
         </div>
     </div>
 
-    <!-- Language Overlay -->
-    <div id="lang-overlay" class="fixed inset-0 z-[2000] bg-[#0c0c0c]/98 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-1000 flex flex-col items-center">
-        <div class="w-full max-w-7xl px-8 pt-12 md:pt-20 pb-8 flex justify-between items-end">
-            <div>
-                <p class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)] mb-2">Region Selection</p>
-                <h2 class="text-4xl md:text-6xl serif italic text-white">Universal <span class="text-[var(--champagne)]">Access</span></h2>
-            </div>
-            <button onclick="toggleLangModal()" class="flex flex-col items-center gap-2 text-[var(--champagne)] opacity-40 hover:opacity-100 transition-opacity">
-                <i data-lucide="x" class="w-6 h-6 md:w-12 md:h-12 font-thin"></i>
-                <span class="text-[8px] tracking-[0.5em] hidden md:block">CLOSE</span>
-            </button>
-        </div>
-        <div class="w-full max-w-7xl px-8 pb-20 overflow-y-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
-                <div class="space-y-4 flex flex-col">
-                    <button onclick="setLanguage('en')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">English</button>
-                    <button onclick="setLanguage('bn')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">বাংলা</button>
-                    <button onclick="setLanguage('zh')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">中文</button>
-                </div>
-                <div class="space-y-4 flex flex-col">
-                    <button onclick="setLanguage('ar')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">العربية</button>
-                    <button onclick="setLanguage('ko')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">한국어</button>
-                    <button onclick="setLanguage('hi')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">हिन्दी</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         lucide.createIcons();
 
@@ -451,16 +418,6 @@
         document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
 
         // --- MODAL CONTROLS ---
-        function toggleLangModal() {
-            const modal = document.getElementById('lang-overlay');
-            const isActive = modal.classList.contains('opacity-100');
-            modal.classList.toggle('opacity-100', !isActive);
-            modal.classList.toggle('pointer-events-auto', !isActive);
-            modal.classList.toggle('opacity-0', isActive);
-            modal.classList.toggle('pointer-events-none', isActive);
-            document.body.style.overflow = isActive ? 'auto' : 'hidden';
-        }
-
         function openLegal(type) {
             const modal = document.getElementById('legal-overlay');
             const title = document.getElementById('legal-overlay-title');
@@ -518,8 +475,6 @@
         function setLanguage(lang) {
             localStorage.setItem('pc_lang', lang);
             const data = langData[lang] || langData.en;
-            if (data.label) document.getElementById('current-lang-label').innerText = data.label;
-
             Object.keys(data).forEach(key => {
                 const el = document.getElementById(key);
                 if (el) {
@@ -528,7 +483,6 @@
                 }
             });
             document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-            if (document.getElementById('lang-overlay').classList.contains('opacity-100')) toggleLangModal();
         }
 
         window.addEventListener('DOMContentLoaded', () => {
