@@ -64,11 +64,11 @@
         /* Noise Texture */
         .noise {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 9998; pointer-events: none; opacity: 0.05; mix-blend-mode: overlay;
+            z-index: 50; pointer-events: none; opacity: 0.05; mix-blend-mode: overlay;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        .h-xl { font-size: clamp(3rem, 10vw, 12rem); line-height: 0.85; letter-spacing: -0.06em; }
+        .h-xl { font-size: clamp(2.5rem, 10vw, 12rem); line-height: 0.85; letter-spacing: -0.06em; }
         .glass-panel {
             background: rgba(15, 15, 15, 0.4);
             backdrop-filter: blur(24px);
@@ -78,6 +78,34 @@
         .glass-panel:hover {
             border-color: var(--gold-bright);
             background: rgba(20, 20, 20, 0.6);
+        }
+
+        /* Header Animation Classes */
+        .nav-hidden {
+            transform: translate3d(-50%, -150%, 0);
+            opacity: 0;
+        }
+        .nav-visible {
+            transform: translate3d(-50%, 0, 0);
+            opacity: 1;
+        }
+
+        /* Mobile Menu Overlay */
+        #mobile-menu {
+            clip-path: circle(0% at 90% 5%);
+            transition: clip-path 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        #mobile-menu.active {
+            clip-path: circle(150% at 90% 5%);
+        }
+        .mobile-link {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        #mobile-menu.active .mobile-link {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .reveal-up {
@@ -140,23 +168,51 @@
     <div class="noise"></div>
 
     <!-- Floating Navigation -->
-    <nav id="main-nav" class="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[1000] glass-panel px-5 md:px-10 py-4 rounded-full flex justify-between items-center">
-        <a href="index.html" class="flex items-center gap-4 group">
+    <nav id="main-nav" class="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[1000] glass-panel px-4 md:px-10 py-3 md:py-4 rounded-full flex justify-between items-center nav-visible">
+        <a href="index.html" class="flex items-center gap-4 group transition-all shrink-0">
             <div class="w-8 h-8 border border-[var(--champagne)] flex items-center justify-center rotate-45 group-hover:bg-[var(--champagne)] transition-all">
                 <span class="rotate-[-45deg] text-[8px] font-bold group-hover:text-black">P/C</span>
             </div>
-            <span id="nav-brand" class="text-[10px] tracking-[0.8em] font-bold uppercase text-white hidden sm:block">Parent Company</span>
+            <div class="shrink-0 hidden sm:block">
+                <span id="nav-brand" class="text-[10px] tracking-[0.8em] font-bold uppercase text-white block leading-none">Parent Company</span>
+                <span class="text-[8px] tracking-[0.4em] text-[var(--champagne)] uppercase mt-1 block opacity-80">Est. 2026</span>
+            </div>
         </a>
 
-        <div class="flex items-center gap-8">
-            <a href="index.html" id="nav-home" class="text-[8px] tracking-[0.4em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Home</a>
-            <a href="contact.html" id="nav-contact" class="text-[8px] tracking-[0.4em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Contact</a>
-            <button onclick="toggleMobileMenu()" class="md:hidden flex flex-col gap-1.5 p-2">
-                <div class="w-5 h-[1px] bg-[var(--champagne)]"></div>
-                <div class="w-5 h-[1px] bg-[var(--champagne)]"></div>
-            </button>
+        <div class="flex items-center gap-4 md:gap-10">
+            <div class="hidden md:flex items-center gap-4 lg:gap-8">
+                <a href="index.html" id="nav-home" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Home</a>
+                <a href="contact.html" id="nav-contact" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Contact</a>
+            </div>
+            
+            <div class="w-px h-6 bg-white/10 hidden sm:block"></div>
+            
+            <div class="flex items-center gap-2 md:gap-8 shrink-0">
+                <button onclick="toggleMobileMenu()" class="md:hidden flex flex-col gap-1 p-2">
+                    <div id="bar1" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
+                    <div id="bar2" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
+                </button>
+            </div>
         </div>
     </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-[1500] bg-[#0A0A0A] flex flex-col justify-center items-center md:hidden">
+        <div class="space-y-12 text-center">
+            <div class="mobile-link delay-100">
+                <a href="index.html" onclick="toggleMobileMenu()" id="mobile-nav-home" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Home</a>
+            </div>
+            <div class="mobile-link delay-200">
+                <a href="contact.html" onclick="toggleMobileMenu()" id="mobile-nav-contact" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Contact</a>
+            </div>
+            <div class="mobile-link delay-300">
+                <button onclick="toggleMobileMenu()" id="mobile-nav-back" class="text-xs tracking-[0.6em] uppercase text-white/40 hover:text-[var(--champagne)] transition-colors mt-8">Back</button>
+            </div>
+            <div class="mobile-link delay-[400ms] pt-12">
+                <p class="text-[8px] tracking-[0.8em] text-white/20 uppercase">Est. 2026</p>
+            </div>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <header class="pt-48 pb-20 px-8 md:px-24 lg:px-32 relative border-b border-white/5">
@@ -358,34 +414,6 @@
         </div>
     </div>
 
-    <!-- Language Overlay (Same as Index for Consistency) -->
-    <div id="lang-overlay" class="fixed inset-0 z-[2000] bg-[#0c0c0c]/98 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-1000 flex flex-col items-center">
-        <div class="w-full max-w-7xl px-8 pt-12 md:pt-20 pb-8 flex justify-between items-end">
-            <div>
-                <p class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)] mb-2">Region Selection</p>
-                <h2 class="text-4xl md:text-6xl serif italic text-white">Universal <span class="text-[var(--champagne)]">Access</span></h2>
-            </div>
-            <button onclick="toggleLangModal()" class="flex flex-col items-center gap-2 text-[var(--champagne)] opacity-40 hover:opacity-100 transition-opacity">
-                <i data-lucide="x" class="w-6 h-6 md:w-12 md:h-12 font-thin"></i>
-                <span class="text-[8px] tracking-[0.5em] hidden md:block">CLOSE</span>
-            </button>
-        </div>
-        <div class="w-full max-w-7xl px-8 pb-20 overflow-y-auto">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
-                <div class="space-y-4 flex flex-col">
-                    <button onclick="setLanguage('en')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">English</button>
-                    <button onclick="setLanguage('bn')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">বাংলা</button>
-                    <button onclick="setLanguage('zh')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">中文</button>
-                </div>
-                <div class="space-y-4 flex flex-col">
-                    <button onclick="setLanguage('ar')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">العربية</button>
-                    <button onclick="setLanguage('ko')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">한국어</button>
-                    <button onclick="setLanguage('hi')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">हिन्दी</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
         lucide.createIcons();
 
@@ -434,6 +462,26 @@
             el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-active'));
         });
 
+        // --- DYNAMIC HEADER CONTROL ---
+        const nav = document.getElementById('main-nav');
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                nav.classList.replace('nav-visible', 'nav-hidden');
+            } else {
+                nav.classList.replace('nav-hidden', 'nav-visible');
+            }
+            lastScrollY = currentScrollY;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (e.clientY < 100) {
+                nav.classList.replace('nav-hidden', 'nav-visible');
+            }
+        });
+
         // --- REVEAL OBSERVER ---
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -444,16 +492,6 @@
         document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
 
         // --- MODAL CONTROLS ---
-        function toggleLangModal() {
-            const modal = document.getElementById('lang-overlay');
-            const isActive = modal.classList.contains('opacity-100');
-            modal.classList.toggle('opacity-100', !isActive);
-            modal.classList.toggle('pointer-events-auto', !isActive);
-            modal.classList.toggle('opacity-0', isActive);
-            modal.classList.toggle('pointer-events-none', isActive);
-            document.body.style.overflow = isActive ? 'auto' : 'hidden';
-        }
-
         function openLegal(type) {
             const modal = document.getElementById('legal-overlay');
             const title = document.getElementById('legal-overlay-title');
@@ -481,10 +519,13 @@
 
         const langData = {
             en: {
-                "nav-brand": "Parent Company", "nav-home": "Home", "nav-contact": "Contact",
+                "label": "English",
+                "nav-brand": "Parent Company", "nav-home": "Home", "nav-contact": "Contact", "mobile-nav-home": "Home", "mobile-nav-contact": "Contact", "mobile-nav-back": "Back",
+                "mobile-lang-label": "English",
                 "services-hero-label": "Synthesis of Excellence",
                 "services-hero-title": "Service <br> <span class='italic text-[var(--champagne)]'>Architecture.</span>",
                 "services-hero-desc": "A three-tier agency ecosystem designed to construct, vocalize, and immortalize premium entities across transcontinental markets.",
+                
                 "tier-01-label": "Tier 01 / Nexus", "tier-01-title": "Agency Alpha: <br> The Architect", "tier-01-desc": "The 'Brain.' Defining the DNA, legal framework, and technical infrastructure of the holding.",
                 "tier-02-label": "Tier 02 / Vision", "tier-02-title": "Agency Gamma: <br> The Soul", "tier-02-desc": "The 'Vision.' Crafting the multimedia immersion and high-fidelity aesthetics of the brand.",
                 "tier-03-label": "Tier 03 / Engine", "tier-03-title": "Agency Beta: <br> The Voice", "tier-03-desc": "The 'Engine.' Driving revenue, market entry, and transcontinental public perception.",
@@ -492,7 +533,9 @@
                 "footer-desc": "High-fidelity business architecture for the 2026 transcontinental economic era. All rights reserved."
             },
             bn: {
-                "nav-brand": "প্যারেন্ট কোম্পানি", "nav-home": "হোম", "nav-contact": "যোগাযোগ",
+                "label": "বাংলা",
+                "nav-brand": "প্যারেন্ট কোম্পানি", "nav-home": "হোম", "nav-contact": "যোগাযোগ", "mobile-nav-home": "হোম", "mobile-nav-contact": "যোগাযোগ", "mobile-nav-back": "ফিরুন",
+                "mobile-lang-label": "বাংলা",
                 "services-hero-label": "উৎকর্ষের সংশ্লেষণ",
                 "services-hero-title": "পরিষেবা <br> <span class='italic text-[var(--champagne)]'>স্থাপত্য।</span>",
                 "services-hero-desc": "একটি ত্রি-স্তরীয় এজেন্সি ইকোসিস্টেম যা আন্তঃমহাদেশীয় বাজারে প্রিমিয়াম সত্তা নির্মাণ, প্রকাশ এবং অমর করার জন্য ডিজাইন করা হয়েছে।",
@@ -515,9 +558,6 @@
                 }
             });
             document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-            if (document.getElementById('lang-overlay').classList.contains('opacity-100')) {
-                toggleLangModal();
-            }
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -525,9 +565,20 @@
             if (savedLang !== 'en') setLanguage(savedLang);
         });
 
+        // --- MOBILE MENU CONTROL ---
         function toggleMobileMenu() {
-            // Mobile nav can be further developed here or handled via index logic
-            alert("Navigation Control Engaged");
+            const menu = document.getElementById('mobile-menu');
+            const bar1 = document.getElementById('bar1');
+            const bar2 = document.getElementById('bar2');
+            const isActive = menu.classList.toggle('active');
+            
+            if (isActive) {
+                bar1.style.transform = 'translateY(4px) rotate(45deg)';
+                bar2.style.transform = 'translateY(-4px) rotate(-45deg)';
+            } else {
+                bar1.style.transform = 'none';
+                bar2.style.transform = 'none';
+            }
         }
     </script>
 </body>
