@@ -77,16 +77,21 @@
         }
 
         /* Typography Scailing */
-        .h-xl { font-size: clamp(3.2rem, 12vw, 18rem); line-height: 1.2; letter-spacing: -0.05em; }
+        .h-xl { font-size: clamp(3.2rem, 12vw, 18rem); line-height: 1.1; letter-spacing: -0.06em; }
         @media (min-width: 768px) { .h-xl { line-height: 0.85; } }
-        .p-luxury { font-size: clamp(1.1rem, 1.5vw, 1.4rem); font-weight: 300; letter-spacing: 0.01em; }
+        .p-luxury { font-size: clamp(1rem, 1.4vw, 1.3rem); font-weight: 300; letter-spacing: 0.02em; }
 
         /* Structural Elements */
         .glass-panel {
             background: rgba(15, 15, 15, 0.4);
             backdrop-filter: blur(24px);
             border: 1px solid var(--gold-dim);
-            transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.8s ease;
+            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+            will-change: transform, border-color;
+        }
+        .glass-panel:hover {
+            border-color: var(--gold-bright);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         /* Header Animation Classes */
@@ -101,12 +106,16 @@
 
         .reveal-up {
             opacity: 0;
-            transform: translateY(80px);
-            transition: all 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+            transform: translateY(40px) scale(0.98);
+            filter: blur(10px);
+            transition: opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1), 
+                        transform 1.5s cubic-bezier(0.19, 1, 0.22, 1),
+                        filter 1.5s cubic-bezier(0.19, 1, 0.22, 1);
         }
         .reveal-up.active {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
+            filter: blur(0);
         }
         
         #hero-title {
@@ -119,6 +128,14 @@
                 radial-gradient(circle at 80% 20%, rgba(212, 200, 182, 0.05) 0%, transparent 40%),
                 radial-gradient(circle at 20% 80%, rgba(212, 200, 182, 0.03) 0%, transparent 40%),
                 var(--obsidian);
+            background-size: 200% 200%;
+            animation: mesh-drift 20s ease infinite;
+        }
+
+        @keyframes mesh-drift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* Buttons & Actions */
@@ -130,8 +147,17 @@
             text-transform: uppercase;
             font-weight: 600;
             overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1), transform 0.1s ease-out;
             border: 1px solid var(--gold-dim);
+        }
+        .btn-luxury::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 200, 182, 0.2), transparent);
+            transition: 0.6s;
+            z-index: 1;
         }
         .btn-luxury:hover {
             background: var(--champagne);
@@ -139,6 +165,10 @@
             border-color: var(--champagne);
             padding-left: 4rem;
             padding-right: 3rem;
+            box-shadow: 0 10px 30px rgba(212, 200, 182, 0.15);
+        }
+        .btn-luxury:hover::after {
+            left: 100%;
         }
 
         .action-text {
@@ -159,8 +189,9 @@
         /* Language Grid Styles */
         .lang-btn {
             font-family: 'Bodoni Moda', serif;
-            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
             opacity: 0.3;
+            letter-spacing: -0.02em;
         }
         .lang-btn:hover {
             opacity: 1;
@@ -260,8 +291,8 @@
         <!-- Integrated Header Actions -->
         <div class="flex items-center gap-4 md:gap-10">
             <div class="hidden md:flex items-center gap-4 lg:gap-8">
-                <a href="#services" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors"><span id="nav-services">Services</span></a>
-                <a href="#contact" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors"><span id="nav-contact">Contact</span></a>
+                <a href="services.html" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors"><span id="nav-services">Services</span></a>
+                <a href="contact.html" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors"><span id="nav-contact">Contact</span></a>
             </div>
             
             <div class="w-px h-6 bg-white/10 hidden sm:block"></div>
@@ -285,13 +316,13 @@
     <div id="mobile-menu" class="fixed inset-0 z-[1500] bg-[#0A0A0A] flex flex-col justify-center items-center md:hidden">
         <div class="space-y-12 text-center">
             <div class="mobile-link delay-100">
-                <a href="#services" onclick="toggleMobileMenu()" id="mobile-nav-services" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Services</a>
+                <a href="services.html" onclick="toggleMobileMenu()" id="mobile-nav-services" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Services</a>
             </div>
             <div class="mobile-link delay-200">
-                <a href="#projects" onclick="toggleMobileMenu()" id="mobile-nav-projects" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Projects</a>
+                <a href="contact.html" onclick="toggleMobileMenu()" id="mobile-nav-contact" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Contact</a>
             </div>
             <div class="mobile-link delay-300">
-                <a href="#contact" onclick="toggleMobileMenu()" id="mobile-nav-contact" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Contact</a>
+                <button onclick="toggleMobileMenu()" id="mobile-nav-back" class="text-xs tracking-[0.6em] uppercase text-white/40 hover:text-[var(--champagne)] transition-colors mt-8">Back</button>
             </div>
             <div class="mobile-link delay-[400ms] pt-12">
                 <p class="text-[8px] tracking-[0.8em] text-white/20 uppercase">Est. 2026</p>
@@ -354,6 +385,23 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Legal Overlay -->
+    <div id="legal-overlay" class="fixed inset-0 z-[2000] bg-[#0c0c0c]/98 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-1000 flex flex-col items-center">
+        <div class="w-full max-w-7xl px-8 pt-12 md:pt-20 pb-8 flex justify-between items-end">
+            <div>
+                <p id="legal-overlay-label" class="action-text text-[10px] opacity-40 uppercase mb-2">Legal Document</p>
+                <h2 id="legal-overlay-title" class="text-4xl md:text-6xl serif italic text-white"></h2>
+            </div>
+            <button onclick="closeLegal()" class="flex flex-col items-center gap-2 text-[var(--champagne)] opacity-40 hover:opacity-100 transition-opacity">
+                <i data-lucide="x" class="w-6 h-6 md:w-12 md:h-12 font-thin"></i>
+                <span class="text-[8px] tracking-[0.5em] hidden md:block">CLOSE</span>
+            </button>
+        </div>
+        <div class="w-full max-w-3xl px-8 py-20 flex-grow flex items-center">
+            <p id="legal-overlay-content" class="p-luxury text-white/60 leading-relaxed text-center md:text-left"></p>
         </div>
     </div>
 
@@ -547,6 +595,13 @@
                         <div class="w-0 group-hover:w-full h-px bg-black transition-all duration-700"></div>
                     </div>
                 </div>
+
+                <div class="mt-24 reveal-up delay-300">
+                    <a href="contact.html" class="btn-luxury group inline-block border-black/10 hover:border-transparent">
+                        <span id="contact-cta-text">Contact Us</span>
+                        <i data-lucide="arrow-right" class="inline-block w-4 h-4 ml-4 transition-transform group-hover:translate-x-2"></i>
+                    </a>
+                </div>
             </div>
         </section>
     </main>
@@ -566,8 +621,8 @@
                 <div class="space-y-4">
                     <p id="footer-legal-label" class="action-text text-white/20 uppercase">Legal</p>
                     <div class="space-y-2 text-[10px] tracking-[0.4em] uppercase text-white/40">
-                        <a href="#" id="footer-privacy" class="block hover:text-white transition-colors">Privacy Protocol</a>
-                        <a href="#" id="footer-charter" class="block hover:text-white transition-colors">Holding Charter</a>
+                        <a href="javascript:void(0)" onclick="openLegal('privacy')" id="footer-privacy" class="block hover:text-white transition-colors">Privacy Protocol</a>
+                        <a href="javascript:void(0)" onclick="openLegal('charter')" id="footer-charter" class="block hover:text-white transition-colors">Holding Charter</a>
                     </div>
                 </div>
                 <p id="footer-copyright" class="text-[9px] tracking-[0.6em] text-white/20 mt-20 uppercase">© 2026 PARENT COMPANY HOLDING. ALL RIGHTS RESERVED.</p>
@@ -604,6 +659,19 @@
             requestAnimationFrame(animateCursor);
         }
         animateCursor();
+
+        // --- MAGNETIC BUTTONS ---
+        document.querySelectorAll('.btn-luxury').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = (e.clientX - rect.left - rect.width / 2) * 0.25;
+                const y = (e.clientY - rect.top - rect.height / 2) * 0.45;
+                btn.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = `translate3d(0, 0, 0)`;
+            });
+        });
 
         // --- HERO PARALLAX (DESKTOP) ---
         const heroTitle = document.getElementById('hero-title');
@@ -692,6 +760,7 @@
                 desc: "Architecting the expansion of high-fidelity entities across the transcontinental axis. We bridge the rigorous fiscal heritage of Europe with the exponential velocity of emerging Asian markets.",
                 cta_hero: "Explore Architecture",
                 cta_services: "View Full Service Architecture",
+                contact_cta_text: "Contact Us",
                 nav_services: "Services",
                 nav_contact: "Contact",
                 lang_overlay_label: "Region Selection",
@@ -1048,7 +1117,9 @@
         };
 
         function setLanguage(lang) {
-            const data = (langData[lang] || translations[lang]) ? { ...langData[lang], ...translations[lang] } : langData.en;
+            localStorage.setItem('pc_lang', lang);
+            window.currentLangCode = lang;
+            const data = langData[lang] || langData.en;
             
             // Update Label
             document.getElementById('current-lang-label').innerText = data.label;
@@ -1086,6 +1157,11 @@
 
             toggleLangModal();
         }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('pc_lang') || 'en';
+            if (savedLang !== 'en') setLanguage(savedLang);
+        });
     </script>
 </body>
 </html>
