@@ -1,1 +1,535 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CONTACT | PARENT COMPANY</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Inter:wght@100;200;300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --obsidian: #0A0A0A;
+            --champagne: #D4C8B6;
+            --gold-dim: rgba(212, 200, 182, 0.12);
+            --gold-bright: rgba(212, 200, 182, 0.5);
+            --text-main: #ECECE7;
+        }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @media (pointer: fine) {
+            * { cursor: none !important; }
+            #cursor-shard, #cursor-tracer { display: block !important; }
+        }
+
+        body {
+            background-color: var(--obsidian);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .serif { font-family: 'Bodoni Moda', serif; }
+
+        /* --- SIGNATURE CURSOR --- */
+        #cursor-shard {
+            width: 2px; height: 20px;
+            background: var(--champagne);
+            position: fixed; pointer-events: none; z-index: 10000;
+            transition: height 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+            display: none;
+        }
+        
+        #cursor-tracer {
+            width: 40px; height: 40px;
+            border: 1px solid var(--gold-dim);
+            position: fixed; pointer-events: none; z-index: 9999;
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+            display: none;
+        }
+
+        .cursor-active #cursor-shard { height: 60px; background: #fff; }
+        .cursor-active #cursor-tracer { 
+            width: 80px; height: 80px; 
+            border-color: var(--champagne); 
+            border-width: 2px;
+            background: rgba(212, 200, 182, 0.05);
+        }
+
+        /* Noise Texture */
+        .noise {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 9998; pointer-events: none; opacity: 0.05; mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .h-xl { font-size: clamp(3rem, 10vw, 12rem); line-height: 0.85; letter-spacing: -0.06em; }
+        .glass-panel {
+            background: rgba(15, 15, 15, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid var(--gold-dim);
+            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .glass-panel:hover { border-color: var(--gold-bright); }
+
+        /* Header Animation Classes */
+        .nav-hidden {
+            transform: translate(-50%, -150%);
+            opacity: 0;
+        }
+        .nav-visible {
+            transform: translate(-50%, 0);
+            opacity: 1;
+        }
+
+        .reveal-up {
+            opacity: 0; transform: translateY(30px) scale(0.98);
+            filter: blur(8px);
+            transition: opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1), 
+                        transform 1.5s cubic-bezier(0.19, 1, 0.22, 1),
+                        filter 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        .reveal-up.active { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+
+        .btn-luxury {
+            position: relative; padding: 1.2rem 3rem; font-size: 0.7rem;
+            letter-spacing: 0.4em; text-transform: uppercase; font-weight: 600;
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1), transform 0.1s ease-out;
+            border: 1px solid var(--gold-dim);
+            overflow: hidden;
+        }
+        .btn-luxury::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(212, 200, 182, 0.2), transparent);
+            transition: 0.6s;
+        }
+        .btn-luxury:hover {
+            background: var(--champagne); color: var(--obsidian);
+            padding-left: 3.5rem; padding-right: 2.5rem;
+        }
+        .btn-luxury:hover::after { left: 100%; }
+
+        .hero-mesh {
+            background: radial-gradient(circle at 50% 50%, rgba(212, 200, 182, 0.05) 0%, transparent 70%);
+            background-size: 200% 200%;
+            animation: mesh-drift 15s ease infinite;
+        }
+        @keyframes mesh-drift {
+            0%, 100% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+        }
+
+        .contact-method:hover i { color: var(--champagne); transform: scale(1.1); }
+        .contact-method i { transition: all 0.5s ease; }
+
+        /* Mobile Menu Overlay */
+        #mobile-menu {
+            clip-path: circle(0% at 90% 5%);
+            transition: clip-path 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        #mobile-menu.active {
+            clip-path: circle(150% at 90% 5%);
+        }
+        .mobile-link {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+        #mobile-menu.active .mobile-link {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="bg-[#0A0A0A] hero-mesh">
+
+    <div id="cursor-shard"></div>
+    <div id="cursor-tracer"></div>
+    <div class="noise"></div>
+
+    <!-- Floating Navigation -->
+    <nav id="main-nav" class="fixed top-6 md:top-8 left-1/2 -translate-x-1/2 w-[95%] max-w-7xl z-[1000] glass-panel px-5 md:px-10 py-4 rounded-full flex justify-between items-center nav-visible">
+        <a href="index.html" class="flex items-center gap-4 group">
+            <div class="w-8 h-8 border border-[var(--champagne)] flex items-center justify-center rotate-45 group-hover:bg-[var(--champagne)] transition-all">
+                <span class="rotate-[-45deg] text-[8px] font-bold group-hover:text-black">P/C</span>
+            </div>
+            <span id="nav-brand" class="text-[10px] tracking-[0.8em] font-bold uppercase text-white hidden sm:block">Parent Company</span>
+        </a>
+
+        <div class="flex items-center gap-8">
+            <a href="index.html" id="nav-home" class="text-[8px] tracking-[0.4em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Home</a>
+            <a href="services.html" id="nav-services" class="text-[8px] tracking-[0.4em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Services</a>
+            <button onclick="toggleMobileMenu()" class="md:hidden flex flex-col gap-1.5 p-2">
+                <div id="bar1" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
+                <div id="bar2" class="w-5 h-[1px] bg-[var(--champagne)] transition-all"></div>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-[1500] bg-[#0A0A0A] flex flex-col justify-center items-center md:hidden">
+        <div class="space-y-12 text-center">
+            <div class="mobile-link delay-100">
+                <a href="index.html" onclick="toggleMobileMenu()" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Home</a>
+            </div>
+            <div class="mobile-link delay-200">
+                <a href="services.html" onclick="toggleMobileMenu()" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Services</a>
+            </div>
+            <div class="mobile-link delay-300">
+                <button onclick="toggleMobileMenu()" class="text-xs tracking-[0.6em] uppercase text-white/40 hover:text-[var(--champagne)] transition-colors mt-8">Back</button>
+            </div>
+            <div class="mobile-link delay-[400ms] pt-12">
+                <p class="text-[8px] tracking-[0.8em] text-white/20 uppercase">Est. 2026</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="pt-48 pb-20 px-8 md:px-24 lg:px-32 relative">
+        <div class="max-w-7xl mx-auto">
+            <p id="contact-hero-label" class="text-[10px] tracking-[0.8em] uppercase text-[var(--champagne)] mb-8 reveal-up">Direct Correspondence</p>
+            <h1 id="contact-hero-title" class="h-xl serif mb-12 reveal-up delay-100">Contact <br> <span class="italic text-[var(--champagne)]">Architecture.</span></h1>
+            <p id="contact-hero-desc" class="max-w-2xl text-white/40 p-luxury leading-relaxed reveal-up delay-200">
+                Initiate a dialogue. Our transcontinental presence is managed through high-fidelity digital channels, ensuring secure and immediate access to our strategic nodes.
+            </p>
+        </div>
+    </header>
+
+    <main class="pb-32 md:pb-64 px-8 md:px-24 lg:px-32">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-20">
+            
+            <!-- Left: Primary Channels -->
+            <div class="space-y-12">
+                <div class="glass-panel p-10 md:p-16 space-y-12 reveal-up">
+                    <div class="contact-method space-y-4">
+                        <p id="contact-email-label" class="text-[10px] tracking-[0.5em] uppercase text-white/30">Email Headquarters</p>
+                        <a href="mailto:hq@parentcompany.global" class="text-2xl md:text-4xl serif italic block hover:text-[var(--champagne)] transition-colors">hq@parentcompany.global</a>
+                    </div>
+                    
+                    <div class="w-full h-px bg-white/5"></div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                        <div class="contact-method space-y-4">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="phone" class="w-4 h-4 text-white/40"></i>
+                                <p id="contact-phone-label" class="text-[10px] tracking-[0.5em] uppercase text-white/30">Phone</p>
+                            </div>
+                            <a href="tel:01XXXXXXXXX" class="text-xl font-light hover:text-[var(--champagne)] transition-colors">01XXXXXXXXX</a>
+                        </div>
+                        <div class="contact-method space-y-4">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="message-circle" class="w-4 h-4 text-white/40"></i>
+                                <p id="contact-whatsapp-label" class="text-[10px] tracking-[0.5em] uppercase text-white/30">WhatsApp</p>
+                            </div>
+                            <a href="https://wa.me/01XXXXXXXXX" class="text-xl font-light hover:text-[var(--champagne)] transition-colors">01XXXXXXXXX</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-up delay-150">
+                    <div class="p-8 border border-white/5 glass-panel rounded-sm">
+                        <div class="flex items-center gap-4 mb-4">
+                            <div class="w-2 h-2 bg-[var(--champagne)] rounded-full animate-pulse"></div>
+                            <span id="contact-status-label" class="text-[9px] tracking-[0.3em] uppercase text-[var(--champagne)]">Digital Concierge Active</span>
+                        </div>
+                        <p id="contact-status-desc" class="text-[11px] text-white/40 leading-relaxed uppercase tracking-widest">Responses are typically architected within one business cycle (24h).</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Strategic Presence (Socials) -->
+            <div class="space-y-8 reveal-up delay-300">
+                <p id="contact-nodes-label" class="text-[10px] tracking-[0.8em] text-white/20 uppercase border-l border-[var(--gold-dim)] pl-6 mb-12">Strategic Nodes</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <a href="#" class="glass-panel p-8 flex items-center justify-between group hover:bg-[var(--champagne)] transition-all">
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="linkedin" class="w-5 h-5 text-white/40 group-hover:text-black"></i>
+                            <span class="text-[10px] tracking-[0.4em] uppercase group-hover:text-black">LinkedIn</span>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-white/20 group-hover:text-black"></i>
+                    </a>
+                    <a href="#" class="glass-panel p-8 flex items-center justify-between group hover:bg-[var(--champagne)] transition-all">
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="twitter" class="w-5 h-5 text-white/40 group-hover:text-black"></i>
+                            <span class="text-[10px] tracking-[0.4em] uppercase group-hover:text-black">Twitter / X</span>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-white/20 group-hover:text-black"></i>
+                    </a>
+                    <a href="#" class="glass-panel p-8 flex items-center justify-between group hover:bg-[var(--champagne)] transition-all">
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="instagram" class="w-5 h-5 text-white/40 group-hover:text-black"></i>
+                            <span class="text-[10px] tracking-[0.4em] uppercase group-hover:text-black">Instagram</span>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-white/20 group-hover:text-black"></i>
+                    </a>
+                    <a href="#" class="glass-panel p-8 flex items-center justify-between group hover:bg-[var(--champagne)] transition-all">
+                        <div class="flex items-center gap-4">
+                            <i data-lucide="hash" class="w-5 h-5 text-white/40 group-hover:text-black"></i>
+                            <span class="text-[10px] tracking-[0.4em] uppercase group-hover:text-black">Threads</span>
+                        </div>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4 text-white/20 group-hover:text-black"></i>
+                    </a>
+                </div>
+
+                <div class="pt-12">
+                    <p id="contact-disclaimer" class="text-[10px] text-white/20 leading-relaxed uppercase tracking-[0.3em] text-center lg:text-left">
+                        Parent Company operates as a distributed entity. No physical headquarters are required for global synthesis.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-black py-20 md:py-40 px-8 md:px-24 lg:px-32 border-t border-white/5">
+        <div class="max-w-[140rem] mx-auto grid grid-cols-1 lg:grid-cols-4 gap-20">
+            <div class="col-span-1 lg:col-span-2 space-y-12">
+                <div class="flex items-center gap-6">
+                    <div class="w-10 h-10 border border-[var(--champagne)] flex items-center justify-center rotate-45">
+                        <span class="rotate-[-45deg] text-[10px] font-bold text-white">P/C</span>
+                    </div>
+                    <h4 class="text-xl tracking-[1.2em] uppercase font-bold text-white">Parent Company</h4>
+                </div>
+                <p id="footer-desc" class="p-luxury text-white/20 max-w-sm">High-fidelity business architecture for the 2026 transcontinental economic era. All rights reserved.</p>
+            </div>
+            <div class="flex flex-col justify-between lg:items-end text-left lg:text-right col-span-1 lg:col-span-2">
+                <div class="space-y-4">
+                    <p id="footer-legal-label" class="action-text text-white/20 uppercase">Legal</p>
+                    <div class="space-y-2 text-[10px] tracking-[0.4em] uppercase text-white/40">
+                        <a href="javascript:void(0)" onclick="openLegal('privacy')" id="footer-privacy" class="block hover:text-white transition-colors">Privacy Protocol</a>
+                        <a href="javascript:void(0)" onclick="openLegal('charter')" id="footer-charter" class="block hover:text-white transition-colors">Holding Charter</a>
+                    </div>
+                </div>
+                <p id="footer-copyright" class="text-[9px] tracking-[0.6em] text-white/20 mt-20 uppercase">© 2026 PARENT COMPANY HOLDING. ALL RIGHTS RESERVED.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Legal Overlay -->
+    <div id="legal-overlay" class="fixed inset-0 z-[2000] bg-[#0c0c0c]/98 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-1000 flex flex-col items-center">
+        <div class="w-full max-w-7xl px-8 pt-12 md:pt-20 pb-8 flex justify-between items-end">
+            <div>
+                <p id="legal-overlay-label" class="action-text text-[10px] opacity-40 uppercase mb-2">Legal Document</p>
+                <h2 id="legal-overlay-title" class="text-4xl md:text-6xl serif italic text-white"></h2>
+            </div>
+            <button onclick="closeLegal()" class="flex flex-col items-center gap-2 text-[var(--champagne)] opacity-40 hover:opacity-100 transition-opacity">
+                <i data-lucide="x" class="w-6 h-6 md:w-12 md:h-12 font-thin"></i>
+                <span class="text-[8px] tracking-[0.5em] hidden md:block">CLOSE</span>
+            </button>
+        </div>
+        <div class="w-full max-w-3xl px-8 py-20 flex-grow flex items-center">
+            <p id="legal-overlay-content" class="p-luxury text-white/60 leading-relaxed text-center md:text-left"></p>
+        </div>
+    </div>
+
+    <!-- Language Overlay -->
+    <div id="lang-overlay" class="fixed inset-0 z-[2000] bg-[#0c0c0c]/98 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-1000 flex flex-col items-center">
+        <div class="w-full max-w-7xl px-8 pt-12 md:pt-20 pb-8 flex justify-between items-end">
+            <div>
+                <p class="text-[10px] tracking-[0.4em] uppercase text-[var(--champagne)] mb-2">Region Selection</p>
+                <h2 class="text-4xl md:text-6xl serif italic text-white">Universal <span class="text-[var(--champagne)]">Access</span></h2>
+            </div>
+            <button onclick="toggleLangModal()" class="flex flex-col items-center gap-2 text-[var(--champagne)] opacity-40 hover:opacity-100 transition-opacity">
+                <i data-lucide="x" class="w-6 h-6 md:w-12 md:h-12 font-thin"></i>
+                <span class="text-[8px] tracking-[0.5em] hidden md:block">CLOSE</span>
+            </button>
+        </div>
+        <div class="w-full max-w-7xl px-8 pb-20 overflow-y-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-20">
+                <div class="space-y-4 flex flex-col">
+                    <button onclick="setLanguage('en')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">English</button>
+                    <button onclick="setLanguage('bn')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">বাংলা</button>
+                    <button onclick="setLanguage('zh')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">中文</button>
+                </div>
+                <div class="space-y-4 flex flex-col">
+                    <button onclick="setLanguage('ar')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">العربية</button>
+                    <button onclick="setLanguage('ko')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">한국어</button>
+                    <button onclick="setLanguage('hi')" class="text-4xl md:text-6xl text-left serif hover:text-[var(--champagne)] transition-colors">हिन्दी</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // --- SIGNATURE CURSOR ---
+        const shard = document.getElementById('cursor-shard');
+        const tracer = document.getElementById('cursor-tracer');
+        let mouseX = 0, mouseY = 0;
+        let shardX = 0, shardY = 0;
+        let tracerX = 0, tracerY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            shardX += (mouseX - shardX) * 0.15;
+            shardY += (mouseY - shardY) * 0.15;
+            tracerX += (mouseX - tracerX) * 0.08;
+            tracerY += (mouseY - tracerY) * 0.08;
+
+            shard.style.left = shardX + 'px';
+            shard.style.top = shardY + 'px';
+            tracer.style.left = tracerX + 'px';
+            tracer.style.top = tracerY + 'px';
+
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // --- MAGNETIC BUTTONS ---
+        document.querySelectorAll('.btn-luxury, .glass-panel').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = (e.clientX - rect.left - rect.width / 2) * 0.15;
+                const y = (e.clientY - rect.top - rect.height / 2) * 0.25;
+                btn.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = `translate3d(0, 0, 0)`;
+            });
+        });
+
+        document.querySelectorAll('a, button').forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('cursor-active'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-active'));
+        });
+
+        // --- DYNAMIC HEADER CONTROL ---
+        const nav = document.getElementById('main-nav');
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                nav.classList.replace('nav-visible', 'nav-hidden');
+            } else {
+                nav.classList.replace('nav-hidden', 'nav-visible');
+            }
+            lastScrollY = currentScrollY;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (e.clientY < 100) {
+                nav.classList.replace('nav-hidden', 'nav-visible');
+            }
+        });
+
+        // --- REVEAL OBSERVER ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+
+        // --- MODAL CONTROLS ---
+        function toggleLangModal() {
+            const modal = document.getElementById('lang-overlay');
+            const isActive = modal.classList.contains('opacity-100');
+            modal.classList.toggle('opacity-100', !isActive);
+            modal.classList.toggle('pointer-events-auto', !isActive);
+            modal.classList.toggle('opacity-0', isActive);
+            modal.classList.toggle('pointer-events-none', isActive);
+            document.body.style.overflow = isActive ? 'auto' : 'hidden';
+        }
+
+        function openLegal(type) {
+            const modal = document.getElementById('legal-overlay');
+            const title = document.getElementById('legal-overlay-title');
+            const content = document.getElementById('legal-overlay-content');
+            
+            if (type === 'privacy') {
+                title.innerHTML = "Privacy <span class='text-[var(--champagne)]'>Protocol</span>";
+                content.innerHTML = "The Parent Company Privacy Protocol (PCP-2026) defines our structural approach to data sovereignty across transcontinental corridors. We treat information as a tangible asset, protected by high-fidelity encryption and decentralized governance.";
+            } else {
+                title.innerHTML = "Holding <span class='text-[var(--champagne)]'>Charter</span>";
+                content.innerHTML = "The Holding Charter is the governing mandate of Parent Company, establishing the protocols for transcontinental capital synthesis and entity expansion. We operate at the intersection of European fiscal heritage and Asian market velocity.";
+            }
+            
+            modal.classList.replace('opacity-0', 'opacity-100');
+            modal.classList.replace('pointer-events-none', 'pointer-events-auto');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLegal() {
+            const modal = document.getElementById('legal-overlay');
+            modal.classList.replace('opacity-100', 'opacity-0');
+            modal.classList.replace('pointer-events-auto', 'pointer-events-none');
+            document.body.style.overflow = 'auto';
+        }
+
+        const langData = {
+            en: {
+                "nav-brand": "Parent Company", "nav-home": "Home", "nav-services": "Services",
+                "contact-hero-label": "Direct Correspondence",
+                "contact-hero-title": "Contact <br> <span class='italic text-[var(--champagne)]'>Architecture.</span>",
+                "contact-hero-desc": "Initiate a dialogue. Our transcontinental presence is managed through high-fidelity digital channels, ensuring secure and immediate access to our strategic nodes.",
+                "contact-email-label": "Email Headquarters", "contact-phone-label": "Phone", "contact-whatsapp-label": "WhatsApp",
+                "contact-status-label": "Digital Concierge Active", "contact-status-desc": "Responses are typically architected within one business cycle (24h).",
+                "contact-nodes-label": "Strategic Nodes",
+                "contact-disclaimer": "Parent Company operates as a distributed entity. No physical headquarters are required for global synthesis.",
+                "footer-desc": "High-fidelity business architecture for the 2026 transcontinental economic era. All rights reserved."
+            },
+            bn: {
+                "nav-brand": "প্যারেন্ট কোম্পানি", "nav-home": "হোম", "nav-services": "পরিষেবা",
+                "contact-hero-label": "সরাসরি যোগাযোগ",
+                "contact-hero-title": "যোগাযোগ <br> <span class='italic text-[var(--champagne)]'>স্থাপত্য।</span>",
+                "contact-hero-desc": "একটি সংলাপ শুরু করুন। আমাদের আন্তঃমহাদেশীয় উপস্থিতি উচ্চ-মানের ডিজিটাল চ্যানেলের মাধ্যমে পরিচালিত হয়।",
+                "contact-email-label": "ইমেল সদর দপ্তর", "contact-phone-label": "ফোন", "contact-whatsapp-label": "হোয়াটসঅ্যাপ",
+                "contact-status-label": "ডিজিটাল কনসিয়ারজ সক্রিয়", "contact-status-desc": "প্রতিক্রিয়া সাধারণত ২৪ ঘণ্টার মধ্যে প্রদান করা হয়।",
+                "contact-nodes-label": "কৌশলগত নোড",
+                "contact-disclaimer": "প্যারেন্ট কোম্পানি একটি বিতরণ করা সত্তা হিসাবে কাজ করে।",
+                "footer-desc": "২০২৬ আন্তঃমহাদেশীয় অর্থনৈতিক যুগের জন্য হাই-ফিডেলিটি ব্যবসা স্থাপত্য। সর্বস্বত্ব সংরক্ষিত।"
+            }
+        };
+
+        function setLanguage(lang) {
+            localStorage.setItem('pc_lang', lang);
+            const data = langData[lang] || langData.en;
+            Object.keys(data).forEach(key => {
+                const el = document.getElementById(key);
+                if (el) {
+                    if (key.includes('title') || key.includes('desc')) el.innerHTML = data[key];
+                    else el.innerText = data[key];
+                }
+            });
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            if (document.getElementById('lang-overlay').classList.contains('opacity-100')) toggleLangModal();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('pc_lang') || 'en';
+            if (savedLang !== 'en') setLanguage(savedLang);
+        });
+
+        // --- MOBILE MENU CONTROL ---
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const bar1 = document.getElementById('bar1');
+            const bar2 = document.getElementById('bar2');
+            const isActive = menu.classList.toggle('active');
+            
+            if (isActive) {
+                bar1.style.transform = 'translateY(4px) rotate(45deg)';
+                bar2.style.transform = 'translateY(-4px) rotate(-45deg)';
+            } else {
+                bar1.style.transform = 'none';
+                bar2.style.transform = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
