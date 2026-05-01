@@ -77,7 +77,8 @@
         }
 
         /* Typography Scailing */
-        .h-xl { font-size: clamp(3rem, 12vw, 18rem); line-height: 0.85; letter-spacing: -0.05em; }
+        .h-xl { font-size: clamp(3.2rem, 12vw, 18rem); line-height: 1.2; letter-spacing: -0.05em; }
+        @media (min-width: 768px) { .h-xl { line-height: 0.85; } }
         .p-luxury { font-size: clamp(1.1rem, 1.5vw, 1.4rem); font-weight: 300; letter-spacing: 0.01em; }
 
         /* Structural Elements */
@@ -259,8 +260,8 @@
         <!-- Integrated Header Actions -->
         <div class="flex items-center gap-4 md:gap-10">
             <div class="hidden md:flex items-center gap-4 lg:gap-8">
-                <a href="#services" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Services</a>
-                <a href="#contact" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors">Contact</a>
+                <a href="#services" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors"><span id="nav-services">Services</span></a>
+                <a href="#contact" class="text-[7px] lg:text-[8px] tracking-[0.3em] lg:tracking-[0.5em] uppercase text-white/50 hover:text-[var(--champagne)] transition-colors"><span id="nav-contact">Contact</span></a>
             </div>
             
             <div class="w-px h-6 bg-white/10 hidden sm:block"></div>
@@ -284,13 +285,13 @@
     <div id="mobile-menu" class="fixed inset-0 z-[1500] bg-[#0A0A0A] flex flex-col justify-center items-center md:hidden">
         <div class="space-y-12 text-center">
             <div class="mobile-link delay-100">
-                <a href="#services" onclick="toggleMobileMenu()" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Services</a>
+                <a href="#services" onclick="toggleMobileMenu()" id="mobile-nav-services" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Services</a>
             </div>
             <div class="mobile-link delay-200">
-                <a href="#projects" onclick="toggleMobileMenu()" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Projects</a>
+                <a href="#projects" onclick="toggleMobileMenu()" id="mobile-nav-projects" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Projects</a>
             </div>
             <div class="mobile-link delay-300">
-                <a href="#contact" onclick="toggleMobileMenu()" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Contact</a>
+                <a href="#contact" onclick="toggleMobileMenu()" id="mobile-nav-contact" class="text-4xl serif italic hover:text-[var(--champagne)] transition-colors">Contact</a>
             </div>
             <div class="mobile-link delay-[400ms] pt-12">
                 <p class="text-[8px] tracking-[0.8em] text-white/20 uppercase">Est. 2026</p>
@@ -302,12 +303,12 @@
     <div id="lang-overlay" class="fixed inset-0 z-[2000] bg-[#0c0c0c]/98 backdrop-blur-3xl opacity-0 pointer-events-none transition-all duration-1000 flex flex-col items-center">
         <div class="w-full max-w-7xl px-8 pt-12 md:pt-20 pb-8 flex justify-between items-end">
             <div>
-                <p class="action-text text-[10px] opacity-40 uppercase mb-2">Region Selection</p>
-                <h2 class="text-4xl md:text-6xl serif italic text-white">Universal <span class="text-[var(--champagne)]">Access</span></h2>
+                <p id="lang-overlay-label" class="action-text text-[10px] opacity-40 uppercase mb-2">Region Selection</p>
+                <h2 id="lang-overlay-title" class="text-4xl md:text-6xl serif italic text-white">Universal <span class="text-[var(--champagne)]">Access</span></h2>
             </div>
             <button onclick="toggleLangModal()" class="flex flex-col items-center gap-2 text-[var(--champagne)] opacity-40 hover:opacity-100 transition-opacity">
                 <i data-lucide="x" class="w-6 h-6 md:w-12 md:h-12 font-thin"></i>
-                <span class="text-[8px] tracking-[0.5em] hidden md:block">CLOSE</span>
+                <span id="lang-overlay-close" class="text-[8px] tracking-[0.5em] hidden md:block">CLOSE</span>
             </button>
         </div>
 
@@ -315,8 +316,8 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-24">
                 <!-- Europe -->
                 <div class="space-y-8">
-                    <p class="text-[10px] tracking-[0.8em] text-white/20 uppercase border-l border-[var(--gold-dim)] pl-6">Western Hub</p>
-                    <div class="grid grid-cols-2 md:grid-cols-1 gap-4">
+                    <p id="lang-overlay-hub-west" class="text-[10px] tracking-[0.8em] text-white/20 uppercase border-l border-[var(--gold-dim)] pl-6">Western Hub</p>
+                    <div class="grid grid-cols-1 gap-4">
                         <button onclick="setLanguage('en')" class="lang-btn text-xl md:text-5xl text-left">English</button>
                         <button onclick="setLanguage('nl')" class="lang-btn text-xl md:text-5xl text-left">Nederlands</button>
                         <button onclick="setLanguage('fr')" class="lang-btn text-xl md:text-5xl text-left">Français</button>
@@ -330,24 +331,25 @@
                 
                 <!-- Asia -->
                 <div class="space-y-8">
-                    <p class="text-[10px] tracking-[0.8em] text-white/20 uppercase border-l border-[var(--gold-dim)] pl-6">Eastern Hub</p>
-                    <div class="grid grid-cols-2 md:grid-cols-1 gap-4">
+                    <p id="lang-overlay-hub-east" class="text-[10px] tracking-[0.8em] text-white/20 uppercase border-l border-[var(--gold-dim)] pl-6">Eastern & Middle Eastern Hub (Asian Hub)</p>
+                    <div class="grid grid-cols-1 gap-4">
                         <button onclick="setLanguage('zh')" class="lang-btn text-2xl md:text-6xl text-left font-light">中文</button>
                         <button onclick="setLanguage('ja')" class="lang-btn text-2xl md:text-6xl text-left font-light">日本語</button>
                         <button onclick="setLanguage('ko')" class="lang-btn text-2xl md:text-6xl text-left font-light">한국어</button>
                         <button onclick="setLanguage('bn')" class="lang-btn text-xl md:text-5xl text-left">বাংলা</button>
                         <button onclick="setLanguage('hi')" class="lang-btn text-xl md:text-5xl text-left">हिन्दी</button>
+                        <button onclick="setLanguage('ar')" class="lang-btn text-2xl md:text-6xl text-left font-light">العربية</button>
                     </div>
                 </div>
 
                 <!-- Global / Emerging -->
                 <div class="space-y-8">
-                    <p class="text-[10px] tracking-[0.8em] text-white/20 uppercase border-l border-[var(--gold-dim)] pl-6">Strategic Nodes</p>
+                    <p id="lang-overlay-nodes-label" class="text-[10px] tracking-[0.8em] text-white/20 uppercase border-l border-[var(--gold-dim)] pl-6">Strategic Nodes</p>
                     <div class="p-8 border border-white/5 glass-panel rounded-sm">
-                        <p class="text-[11px] text-white/40 mb-6 leading-relaxed">Parent Company protocols are deployed in primary economic centers. Our language coverage reflects our current and projected physical presence for 2026-2030.</p>
+                        <p id="lang-overlay-nodes-desc" class="text-[11px] text-white/40 mb-6 leading-relaxed">Parent Company protocols are deployed in primary economic centers. Our language coverage reflects our current and projected physical presence for 2026-2030.</p>
                         <div class="flex items-center gap-4">
                             <div class="w-2 h-2 bg-[var(--champagne)] rounded-full animate-pulse"></div>
-                            <span class="text-[9px] tracking-[0.3em] uppercase text-[var(--champagne)]">All Systems Operational</span>
+                            <span id="lang-overlay-status" class="text-[9px] tracking-[0.3em] uppercase text-[var(--champagne)]">All Systems Operational</span>
                         </div>
                     </div>
                 </div>
@@ -377,10 +379,10 @@
                             Architecting the expansion of high-fidelity entities across the transcontinental axis. We bridge the rigorous fiscal heritage of Europe with the exponential velocity of emerging Asian markets.
                         </p>
                         <div class="mt-16 reveal-up delay-300">
-                            <button class="btn-luxury group w-full sm:w-auto text-center">
-                                Explore Architecture 
+                            <a href="#services" class="btn-luxury group w-full sm:w-auto text-center inline-block">
+                                <span id="hero-cta-text">Explore Architecture</span> 
                                 <i data-lucide="arrow-right" class="inline-block w-4 h-4 ml-4 transition-transform group-hover:translate-x-2"></i>
-                            </button>
+                            </a>
                         </div>
                     </div>
                     <div class="lg:col-span-6 flex flex-col items-center lg:items-end reveal-up delay-500">
@@ -406,18 +408,18 @@
             <div class="max-w-7xl mx-auto">
                 <div class="grid grid-cols-1 lg:grid-cols-12 gap-24">
                     <div class="lg:col-span-7">
-                        <h3 class="action-text mb-8 md:mb-16 opacity-30">01 / Nexus</h3>
-                        <p class="text-5xl md:text-7xl lg:text-8xl serif italic leading-[1.1] reveal-up">
+                        <h3 id="vision-nexus-label" class="action-text mb-8 md:mb-16 opacity-30">01 / Nexus</h3>
+                        <p id="vision-title" class="text-5xl md:text-7xl lg:text-8xl serif italic leading-[1.1] reveal-up">
                             Scale is the <br> ultimate <span class="text-[var(--champagne)] underline decoration-1 underline-offset-8">Form.</span>
                         </p>
                     </div>
                     <div class="lg:col-span-5 flex flex-col justify-end gap-16 reveal-up delay-200">
-                        <p class="p-luxury text-white/40 leading-loose">
+                        <p id="vision-desc" class="p-luxury text-white/40 leading-loose">
                             Established in 2026, we operate at the intersection of anthropological insight and structural governance. Our expansion protocols ensure your legacy remains untarnished in new territories.
                         </p>
                         <div class="flex items-center gap-10">
                             <div class="w-20 h-px bg-[var(--champagne)]"></div>
-                            <span class="action-text text-[11px]">Legacy First Architecture</span>
+                            <span id="vision-tag" class="action-text text-[11px]">Legacy First Architecture</span>
                         </div>
                     </div>
                 </div>
@@ -428,92 +430,100 @@
         <section id="services" class="py-24 md:py-72 bg-[#0D0D0C]">
             <div class="px-8 md:px-24 lg:px-32 mb-20 md:mb-40 flex flex-col md:flex-row justify-between items-end">
                 <div>
-                    <h2 class="action-text opacity-30 mb-8 uppercase">02 / Services</h2>
-                    <h3 class="text-5xl md:text-8xl serif">Transcontinental <br> <span class="italic text-[var(--champagne)]">Expertise</span></h3>
+                    <h2 id="services-label" class="action-text opacity-30 mb-8 uppercase">02 / Services</h2>
+                    <h3 id="services-title" class="text-5xl md:text-8xl serif">Transcontinental <br> <span class="italic text-[var(--champagne)]">Expertise</span></h3>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3">
                 <div class="group border border-white/5 p-12 md:p-24 space-y-12 hover:bg-white/5 transition-all duration-1000 relative reveal-up">
                     <div class="absolute top-10 right-10 text-[var(--champagne)] opacity-10 text-9xl serif italic group-hover:opacity-20 transition-opacity">01</div>
-                    <h4 class="text-3xl tracking-[0.2em] font-light uppercase">Structural <br> Governance</h4>
-                    <p class="text-white/30 p-luxury leading-relaxed font-light">Hardening holding structures for high-value intellectual property across multi-legal jurisdictions.</p>
+                    <h4 id="service-1-title" class="text-3xl tracking-[0.2em] font-light uppercase">Structural <br> Governance</h4>
+                    <p id="service-1-desc" class="text-white/30 p-luxury leading-relaxed font-light">Hardening holding structures for high-value intellectual property across multi-legal jurisdictions.</p>
                 </div>
                 <div class="group border border-white/5 p-12 md:p-24 space-y-12 hover:bg-white/5 transition-all duration-1000 relative reveal-up delay-150">
                     <div class="absolute top-10 right-10 text-[var(--champagne)] opacity-10 text-9xl serif italic group-hover:opacity-20 transition-opacity">02</div>
-                    <h4 class="text-3xl tracking-[0.2em] font-light uppercase">Market <br> Integration</h4>
-                    <p class="text-white/30 p-luxury leading-relaxed font-light">Proprietary stacks that synthesize local ground truths with central board objectives.</p>
+                    <h4 id="service-2-title" class="text-3xl tracking-[0.2em] font-light uppercase">Market <br> Integration</h4>
+                    <p id="service-2-desc" class="text-white/30 p-luxury leading-relaxed font-light">Proprietary stacks that synthesize local ground truths with central board objectives.</p>
                 </div>
                 <div class="group border border-white/5 p-12 md:p-24 space-y-12 hover:bg-white/5 transition-all duration-1000 relative reveal-up delay-300">
                     <div class="absolute top-10 right-10 text-[var(--champagne)] opacity-10 text-9xl serif italic group-hover:opacity-20 transition-opacity">03</div>
-                    <h4 class="text-3xl tracking-[0.2em] font-light uppercase">Capital <br> Fidelity</h4>
-                    <p class="text-white/30 p-luxury leading-relaxed font-light">Precision positioning that ensures luxury narratives remain premium in rapid-growth markets.</p>
+                    <h4 id="service-3-title" class="text-3xl tracking-[0.2em] font-light uppercase">Capital <br> Fidelity</h4>
+                    <p id="service-3-desc" class="text-white/30 p-luxury leading-relaxed font-light">Precision positioning that ensures luxury narratives remain premium in rapid-growth markets.</p>
                 </div>
+            </div>
+
+            <!-- Full Services Link -->
+            <div class="mt-20 md:mt-32 px-8 md:px-24 lg:px-32 flex justify-center reveal-up delay-500">
+                <a href="services.html" class="btn-luxury group w-full max-w-2xl text-center inline-block py-8 md:py-10 text-sm md:text-base">
+                    <span id="services-cta-text">View Full Service Architecture</span>
+                    <i data-lucide="arrow-right" class="inline-block w-5 h-5 ml-6 transition-transform group-hover:translate-x-3"></i>
+                </a>
             </div>
         </section>
 
         <!-- Current Projects (Venture Marquee) -->
         <section id="projects" class="py-24 md:py-72 bg-[#0A0A0A] overflow-hidden">
             <div class="px-8 md:px-24 lg:px-32 mb-20">
-                <h3 class="action-text opacity-30 mb-8 uppercase">03 / Venture Marquee</h3>
-                <h2 class="text-6xl md:text-8xl serif">Current <br> <span class="italic text-[var(--champagne)]">Projects</span></h2>
+                <h3 id="projects-label" class="action-text opacity-30 mb-8 uppercase">03 / Venture Marquee</h3>
+                <h2 id="projects-title" class="text-6xl md:text-8xl serif">Current <br> <span class="italic text-[var(--champagne)]">Projects</span></h2>
             </div>
 
             <div class="marquee-wrapper border-y border-white/5">
                 <div class="marquee-content">
                     <!-- Dunya -->
                     <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
-                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Retail & Logistics</span>
+                        <span class="project-1-tag text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Retail & Logistics</span>
                         <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Dunya</h4>
-                        <p class="text-white/40 p-luxury leading-relaxed font-light">Premium International Retail & Brutalist Grocery.</p>
+                        <p class="project-1-desc text-white/40 p-luxury leading-relaxed font-light">Premium International Retail & Brutalist Grocery.</p>
                     </div>
                     <!-- Vareno Events BD -->
                     <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
-                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Events & Logistics</span>
+                        <span class="project-2-tag text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Events & Logistics</span>
                         <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Vareno Events BD</h4>
-                        <p class="text-white/40 p-luxury leading-relaxed font-light">High-end Event Management & Luxury Logistics.</p>
+                        <p class="project-2-desc text-white/40 p-luxury leading-relaxed font-light">High-end Event Management & Luxury Logistics.</p>
                     </div>
                     <!-- Véleur -->
                     <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
-                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Fashion & Artistry</span>
+                        <span class="project-3-tag text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Fashion & Artistry</span>
                         <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Véleur</h4>
-                        <p class="text-white/40 p-luxury leading-relaxed font-light">Minimalist Luxury Couture & Silk Road Artistry.</p>
+                        <p class="project-3-desc text-white/40 p-luxury leading-relaxed font-light">Minimalist Luxury Couture & Silk Road Artistry.</p>
                     </div>
                     <!-- Gontobbo -->
                     <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
-                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Travel & Curation</span>
+                        <span class="project-4-tag text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Travel & Curation</span>
                         <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Gontobbo</h4>
-                        <p class="text-white/40 p-luxury leading-relaxed font-light">Travel Architecture & Destination Curation.</p>
+                        <p class="project-4-desc text-white/40 p-luxury leading-relaxed font-light">Travel Architecture & Destination Curation.</p>
                     </div>
                 </div>
                 <!-- Duplicate for seamless scroll -->
                 <div class="marquee-content" aria-hidden="true">
                     <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
-                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Retail & Logistics</span>
+                        <span class="project-1-tag text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Retail & Logistics</span>
                         <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Dunya</h4>
-                        <p class="text-white/40 p-luxury leading-relaxed font-light">Premium International Retail & Brutalist Grocery.</p>
+                        <p class="project-1-desc text-white/40 p-luxury leading-relaxed font-light">Premium International Retail & Brutalist Grocery.</p>
                     </div>
                     <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
-                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Events & Logistics</span>
+                        <span class="project-2-tag text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Events & Logistics</span>
                         <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Vareno Events BD</h4>
-                        <p class="text-white/40 p-luxury leading-relaxed font-light">High-end Event Management & Luxury Logistics.</p>
+                        <p class="project-2-desc text-white/40 p-luxury leading-relaxed font-light">High-end Event Management & Luxury Logistics.</p>
                     </div>
                     <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
-                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Fashion & Artistry</span>
+                        <span class="project-3-tag text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Fashion & Artistry</span>
                         <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Véleur</h4>
-                        <p class="text-white/40 p-luxury leading-relaxed font-light">Minimalist Luxury Couture & Silk Road Artistry.</p>
+                        <p class="project-3-desc text-white/40 p-luxury leading-relaxed font-light">Minimalist Luxury Couture & Silk Road Artistry.</p>
                     </div>
                     <div class="project-card group w-[280px] md:w-[600px] p-8 md:p-12 glass-panel border-none bg-white/5">
-                        <span class="text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Travel & Curation</span>
+                        <span class="project-4-tag text-[var(--champagne)] text-[8px] md:text-[10px] tracking-[0.5em] uppercase mb-8 md:mb-12 block opacity-40">Travel & Curation</span>
                         <h4 class="text-3xl md:text-6xl serif italic mb-4 md:mb-6 text-white group-hover:text-[var(--champagne)] transition-colors">Gontobbo</h4>
-                        <p class="text-white/40 p-luxury leading-relaxed font-light">Travel Architecture & Destination Curation.</p>
+                        <p class="project-4-desc text-white/40 p-luxury leading-relaxed font-light">Travel Architecture & Destination Curation.</p>
                     </div>
                 </div>
             </div>
             <div class="px-8 md:px-24 lg:px-32 mt-20 flex justify-end">
                 <div class="flex items-center gap-10 reveal-up">
                     <div class="w-20 h-px bg-[var(--champagne)]"></div>
-                    <span class="action-text text-[11px] opacity-40">Entities under management</span>
+                    <span id="project-entities-label" class="action-text text-[11px] opacity-40">Entities under management</span>
                 </div>
             </div>
         </section>
@@ -527,12 +537,12 @@
             </div>
             
             <div class="px-8 md:px-24 lg:px-32 max-w-[140rem] w-full text-center relative z-10">
-                <h2 class="action-text text-black/30 mb-20">04 / Contact Us</h2>
-                <h3 class="text-5xl md:text-[14vw] serif leading-[0.75] mb-24 reveal-up">The Future <br> <span class="italic font-light">Architected.</span></h3>
+                <h2 id="contact-label" class="action-text text-black/30 mb-20">04 / Contact Us</h2>
+                <h3 id="contact-title" class="text-5xl md:text-[14vw] serif leading-tight md:leading-[0.75] mb-24 reveal-up">The Future <br> <span class="italic font-light">Architected.</span></h3>
                 
                 <div class="flex flex-col md:flex-row justify-center items-center gap-16 md:gap-40 reveal-up delay-200">
                     <div class="text-left space-y-6 group">
-                        <p class="action-text text-black/30">Direct Correspondence</p>
+                        <p id="contact-email-label" class="action-text text-black/30">Direct Correspondence</p>
                         <a href="mailto:hq@parentcompany.global" class="text-2xl md:text-5xl font-light hover:text-[var(--champagne)] transition-colors duration-500 break-all md:break-normal">hq@parentcompany.global</a>
                         <div class="w-0 group-hover:w-full h-px bg-black transition-all duration-700"></div>
                     </div>
@@ -550,17 +560,17 @@
                     </div>
                     <h4 class="text-xl tracking-[1.2em] uppercase font-bold text-white">Parent Company</h4>
                 </div>
-                <p class="p-luxury text-white/20 max-w-sm">High-fidelity business architecture for the 2026 transcontinental economic era. All rights reserved.</p>
+                <p id="footer-desc" class="p-luxury text-white/20 max-w-sm">High-fidelity business architecture for the 2026 transcontinental economic era. All rights reserved.</p>
             </div>
             <div class="flex flex-col justify-between lg:items-end text-left lg:text-right col-span-1 lg:col-span-2">
                 <div class="space-y-4">
-                    <p class="action-text text-white/20 uppercase">Legal</p>
+                    <p id="footer-legal-label" class="action-text text-white/20 uppercase">Legal</p>
                     <div class="space-y-2 text-[10px] tracking-[0.4em] uppercase text-white/40">
-                        <a href="#" class="block hover:text-white transition-colors">Privacy Protocol</a>
-                        <a href="#" class="block hover:text-white transition-colors">Holding Charter</a>
+                        <a href="#" id="footer-privacy" class="block hover:text-white transition-colors">Privacy Protocol</a>
+                        <a href="#" id="footer-charter" class="block hover:text-white transition-colors">Holding Charter</a>
                     </div>
                 </div>
-                <p class="text-[9px] tracking-[0.6em] text-white/20 mt-20 uppercase">© 2026 PARENT COMPANY HOLDING. ALL RIGHTS RESERVED.</p>
+                <p id="footer-copyright" class="text-[9px] tracking-[0.6em] text-white/20 mt-20 uppercase">© 2026 PARENT COMPANY HOLDING. ALL RIGHTS RESERVED.</p>
             </div>
         </div>
     </footer>
@@ -675,18 +685,405 @@
         }
 
         const langData = {
-            en: { label: "English", title: "The Global <br> <span class='italic font-light text-[var(--champagne)]'>Standard.</span>", desc: "Architecting the expansion of high-fidelity entities across the transcontinental axis. We bridge the rigorous fiscal heritage of Europe with the exponential velocity of emerging Asian markets." },
-            bn: { label: "বাংলা", title: "বৈশ্বিক <br> <span class='italic font-light text-[var(--champagne)]'>মানদণ্ড।</span>", desc: "মহাদেশীয় অক্ষ জুড়ে উচ্চ-মানের সত্তার সম্প্রসারণের রূপকার। আমরা ইউরোপের কঠোর আর্থিক ঐতিহ্যের সাথে উদীয়মান এশীয় বাজারের গতিশীলতার সেতুবন্ধন করি।" },
-            zh: { label: "中文", title: "全球 <br> <span class='italic font-light text-[var(--champagne)]'>标准。</span>", desc: "构建跨大陆轴线的高保真实体扩张。我们将欧洲严谨的财政遗产与新兴亚洲市场的指数速度联系起来。" },
-            ja: { label: "日本語", title: "グローバル <br> <span class='italic font-light text-[var(--champagne)]'>スタンダード。</span>", desc: "大陸軸を越えた高精度エンティティの拡張を構築します。欧州の厳格な財政遺産と、台頭するアジア市場の加速度的なスピードを橋渡しします。" },
-            nl: { label: "Nederlands", title: "De Wereldwijde <br> <span class='italic font-light text-[var(--champagne)]'>Standaard.</span>", desc: "Architectuur voor de expansie van high-fidelity entiteiten over de transcontinentale as. Wij slaan de brug tussen het rigoureuze fiscale erfgoed van Europa en de exponentiële snelheid van opkomende Aziatische markten." }
+            en: { 
+                label: "English", 
+                tag: "Synthesis of Civilizations — Est. 2026",
+                title: "The Global <br> <span class='italic font-light text-[var(--champagne)]'>Standard.</span>", 
+                desc: "Architecting the expansion of high-fidelity entities across the transcontinental axis. We bridge the rigorous fiscal heritage of Europe with the exponential velocity of emerging Asian markets.",
+                cta_hero: "Explore Architecture",
+                cta_services: "View Full Service Architecture",
+                nav_services: "Services",
+                nav_contact: "Contact",
+                lang_overlay_label: "Region Selection",
+                lang_overlay_title: "Universal <span class='text-[var(--champagne)]'>Access</span>",
+                lang_overlay_close: "CLOSE",
+                lang_overlay_hub_west: "Western Hub",
+                lang_overlay_hub_east: "Asian Hub",
+                lang_overlay_nodes_label: "Strategic Nodes",
+                lang_overlay_nodes_desc: "Parent Company protocols are deployed in primary economic centers. Our language coverage reflects our current and projected physical presence for 2026-2030.",
+                lang_overlay_status: "All Systems Operational",
+                vision_nexus_label: "01 / Nexus",
+                vision_title: "Scale is the <br> ultimate <span class='text-[var(--champagne)] underline decoration-1 underline-offset-8'>Form.</span>",
+                vision_desc: "Established in 2026, we operate at the intersection of anthropological insight and structural governance. Our expansion protocols ensure your legacy remains untarnished in new territories.",
+                vision_tag: "Legacy First Architecture",
+                services_label: "02 / Services",
+                services_title: "Transcontinental <br> <span class='italic text-[var(--champagne)]'>Expertise</span>",
+                service_1_title: "Structural <br> Governance",
+                service_1_desc: "Hardening holding structures for high-value intellectual property across multi-legal jurisdictions.",
+                service_2_title: "Market <br> Integration",
+                service_2_desc: "Proprietary stacks that synthesize local ground truths with central board objectives.",
+                service_3_title: "Capital <br> Fidelity",
+                service_3_desc: "Precision positioning that ensures luxury narratives remain premium in rapid-growth markets.",
+                projects_label: "03 / Venture Marquee",
+                projects_title: "Current <br> <span class='italic text-[var(--champagne)]'>Projects</span>",
+                project_entities_label: "Entities under management",
+                project_1_tag: "Retail & Logistics", project_1_desc: "Premium International Retail & Brutalist Grocery.",
+                project_2_tag: "Events & Logistics", project_2_desc: "High-end Event Management & Luxury Logistics.",
+                project_3_tag: "Fashion & Artistry", project_3_desc: "Minimalist Luxury Couture & Silk Road Artistry.",
+                project_4_tag: "Travel & Curation", project_4_desc: "Travel Architecture & Destination Curation.",
+                contact_label: "04 / Contact Us",
+                contact_title: "The Future <br> <span class='italic font-light'>Architected.</span>",
+                contact_email_label: "Direct Correspondence",
+                footer_desc: "High-fidelity business architecture for the 2026 transcontinental economic era. All rights reserved.",
+                footer_legal_label: "Legal",
+                footer_privacy: "Privacy Protocol",
+                footer_charter: "Holding Charter",
+                footer_copyright: "© 2026 PARENT COMPANY HOLDING. ALL RIGHTS RESERVED."
+            },
+            bn: { 
+                label: "বাংলা", 
+                tag: "সভ্যতার সংশ্লেষণ — স্থাপিত ২০২৬",
+                title: "বৈশ্বিক <br> <span class='italic font-light text-[var(--champagne)]'>মানদণ্ড।</span>", 
+                desc: "মহাদেশীয় অক্ষ জুড়ে উচ্চ-মানের সত্তার সম্প্রসারণের রূপকার। আমরা ইউরোপের কঠোর আর্থিক ঐতিহ্যের সাথে উদীয়মান এশীয় বাজারের গতিশীলতার সেতুবন্ধন করি।",
+                cta_hero: "আর্কিটেকচার অন্বেষণ করুন",
+                cta_services: "সম্পূর্ণ পরিষেবা আর্কিটেকচার দেখুন",
+                nav_services: "পরিষেবা",
+                nav_contact: "যোগাযোগ",
+                lang_overlay_label: "অঞ্চল নির্বাচন",
+                lang_overlay_title: "সর্বজনীন <span class='text-[var(--champagne)]'>অ্যাক্সেস</span>",
+                lang_overlay_close: "বন্ধ করুন",
+                lang_overlay_hub_west: "পশ্চিমা হাব",
+                lang_overlay_hub_east: "পূর্ব ও মধ্যপ্রাচ্য হাব (এশীয় হাব)",
+                lang_overlay_nodes_label: "কৌশলগত নোড",
+                lang_overlay_nodes_desc: "প্যারেন্ট কোম্পানির প্রোটোকল প্রাথমিক অর্থনৈতিক কেন্দ্রগুলোতে মোতায়েন করা হয়েছে। আমাদের ভাষা কভারেজ ২০২৬-২০৩০ এর জন্য আমাদের বর্তমান এবং অভিক্ষিপ্ত শারীরিক উপস্থিতি প্রতিফলিত করে।",
+                lang_overlay_status: "সব সিস্টেম চালু আছে",
+                vision_nexus_label: "০১ / নেক্সাস",
+                vision_title: "স্কেল হলো <br> চূড়ান্ত <span class='text-[var(--champagne)] underline decoration-1 underline-offset-8'>রূপ।</span>",
+                vision_desc: "২০২৬ সালে প্রতিষ্ঠিত, আমরা নৃতাত্ত্বিক অন্তর্দৃষ্টি এবং কাঠামোগত শাসনের সংযোগস্থলে কাজ করি। আমাদের সম্প্রসারণ প্রোটোকল নিশ্চিত করে যে আপনার উত্তরাধিকার নতুন অঞ্চলগুলোতে অক্ষুণ্ণ থাকে।",
+                vision_tag: "লিগ্যাসি ফার্স্ট আর্কিটেকচার",
+                services_label: "০২ / পরিষেবা",
+                services_title: "আন্তঃমহাদেশীয় <br> <span class='italic text-[var(--champagne)]'>দক্ষতা</span>",
+                service_1_title: "কাঠামোগত <br> শাসন",
+                service_1_desc: "বহু-আইনি এখতিয়ার জুড়ে উচ্চ-মূল্যের মেধা সম্পদের জন্য হোল্ডিং কাঠামো শক্তিশালী করা।",
+                service_2_title: "বাজার <br> একীকরণ",
+                service_2_desc: "মালিকানাধীন স্ট্যাক যা কেন্দ্রীয় বোর্ডের লক্ষ্যগুলোর সাথে স্থানীয় সত্যের সংশ্লেষণ করে।",
+                service_3_title: "মূলধন <br> বিশ্বস্ততা",
+                service_3_desc: "নির্ভুল পজিশনিং যা নিশ্চিত করে যে দ্রুত বর্ধনশীল বাজারে বিলাসবহুল আখ্যানগুলো প্রিমিয়াম থাকে।",
+                projects_label: "০৩ / ভেঞ্চার মার্কি",
+                projects_title: "বর্তমান <br> <span class='italic text-[var(--champagne)]'>প্রকল্প</span>",
+                project_entities_label: "ব্যবস্থাপনার অধীনে থাকা সত্তা",
+                project_1_tag: "খুচরা ও লজিস্টিকস", project_1_desc: "প্রিমিয়াম আন্তর্জাতিক খুচরা ও ব্রুটালিস্ট মুদিখানা।",
+                project_2_tag: "ইভেন্ট ও লজিস্টিকস", project_2_desc: "উচ্চ-মানের ইভেন্ট ম্যানেজমেন্ট এবং লাক্সারি লজিস্টিকস।",
+                project_3_tag: "ফ্যাশন ও শৈল্পিকতা", project_3_desc: "মিনিমালিস্ট লাক্সারি ফ্যাশন এবং সিল্ক রোড আর্ট।",
+                project_4_tag: "ভ্রমণ ও কিউরেশন", project_4_desc: "ভ্রমণ স্থাপত্য এবং গন্তব্য কিউরেশন।",
+                contact_label: "০৪ / যোগাযোগ",
+                contact_title: "ভবিষ্যতের <br> <span class='italic font-light'>স্থাপত্য।</span>",
+                contact_email_label: "সরাসরি যোগাযোগ",
+                footer_desc: "২০২৬ আন্তঃমহাদেশীয় অর্থনৈতিক যুগের জন্য হাই-ফিডেলিটি ব্যবসা স্থাপত্য। সর্বস্বত্ব সংরক্ষিত।",
+                footer_legal_label: "আইনি",
+                footer_privacy: "গোপনীয়তা প্রোটোকল",
+                footer_charter: "হোল্ডিং চার্টার",
+                footer_copyright: "© ২০২৬ প্যারেন্ট কোম্পানি হোল্ডিং। সর্বস্বত্ব সংরক্ষিত।"
+            },
+            zh: { 
+                label: "中文", 
+                tag: "文明的综合 — 始于 2026",
+                title: "全球 <br> <span class='italic font-light text-[var(--champagne)]'>标准。</span>", 
+                desc: "构建跨大陆轴线的高保真实体扩张。我们将欧洲严谨的财政遗产与新兴亚洲市场的指数速度联系起来。",
+                cta_hero: "探索建筑",
+                cta_services: "查看完整服务架构",
+                nav_services: "服务",
+                nav_contact: "联系我们",
+                lang_overlay_label: "区域选择",
+                lang_overlay_title: "全球 <span class='text-[var(--champagne)]'>访问</span>",
+                lang_overlay_close: "关闭",
+                lang_overlay_hub_west: "西方中心",
+                lang_overlay_hub_east: "东方与中东枢纽 (亚洲枢纽)",
+                lang_overlay_nodes_label: "战略节点",
+                lang_overlay_nodes_desc: "母公司协议已部署在主要经济中心。我们的语言覆盖范围反映了我们目前和预计的 2026-2030 年实体存在。",
+                lang_overlay_status: "所有系统运行正常",
+                vision_nexus_label: "01 / 纽带",
+                vision_title: "规模是 <br> 终极 <span class='text-[var(--champagne)] underline decoration-1 underline-offset-8'>形式。</span>",
+                vision_desc: "我们成立于 2026 年，运作于人类学洞察与结构治理的交汇处。我们的扩张协议确保您的遗产在海外领土依然保持纯粹。",
+                vision_tag: "传承优先架构",
+                services_label: "02 / 服务",
+                services_title: "跨洲际 <br> <span class='italic text-[var(--champagne)]'>专业知识</span>",
+                service_1_title: "结构化 <br> 治理",
+                service_1_desc: "强化跨多法律管辖区的高价值知识产权控股结构。",
+                service_2_title: "市场 <br> 整合",
+                service_2_desc: "合成当地实际情况与中心董事会目标的专有技术栈。",
+                service_3_title: "资本 <br> 忠诚度",
+                service_3_desc: "精确的市场定位，确保奢侈品牌叙事在快速增长的市场中保持高端。",
+                projects_label: "03 / 风险投资展示",
+                projects_title: "当前 <br> <span class='italic text-[var(--champagne)]'>项目</span>",
+                project_entities_label: "管理实体",
+                project_1_tag: "零售与物流", project_1_desc: "高级国际零售与野兽派杂货店。",
+                project_2_tag: "活动与物流", project_2_desc: "高端活动策划与豪华物流。",
+                project_3_tag: "时尚与艺术", project_3_desc: "简约奢侈定制与丝路工艺。",
+                project_4_tag: "旅行与策划", project_4_desc: "旅行架构与目的地定制。",
+                contact_label: "04 / 联系我们",
+                contact_title: "未来的 <br> <span class='italic font-light'>架构。</span>",
+                contact_email_label: "直接通信",
+                footer_desc: "为 2026 跨洲经济时代打造的高保真商业架构。保留所有权利。",
+                footer_legal_label: "法律",
+                footer_privacy: "隐私协议",
+                footer_charter: "控股章程",
+                footer_copyright: "© 2026 PARENT COMPANY HOLDING. 保留所有权利。"
+            },
+            ja: { 
+                label: "日本語", 
+                tag: "文明の統合 — 2026年設立",
+                title: "グローバル <br> <span class='italic font-light text-[var(--champagne)]'>スタンダード。</span>", 
+                desc: "大陸軸を越えた高精度エンティティの拡張を構築します。欧州の厳格な財政遺産と、台頭するアジア市場の加速度的なスピードを橋渡しします。",
+                cta_hero: "アーキテクチャを探索する",
+                cta_services: "フルサービス・アーキテクチャを表示",
+                nav_services: "サービス",
+                nav_contact: "お問い合わせ",
+                lang_overlay_label: "地域選択",
+                lang_overlay_title: "ユニバーサル <span class='text-[var(--champagne)]'>アクセス</span>",
+                lang_overlay_close: "閉じる",
+                lang_overlay_hub_west: "ウェスタン・ハブ",
+                lang_overlay_hub_east: "東部・中東ハブ",
+                lang_overlay_nodes_label: "戦略拠点",
+                lang_overlay_nodes_desc: "親会社のプロトコルは主要な経済圏に配備されています。当社の言語対応は、2026年から2030年にかけての現在および予測される物理的なプレゼンスを反映しています。",
+                lang_overlay_status: "全システム正常稼働中",
+                vision_nexus_label: "01 / ネクサス",
+                vision_title: "規模こそが <br> 究極の <span class='text-[var(--champagne)] underline decoration-1 underline-offset-8'>形態。</span>",
+                vision_desc: "2026年に設立された当社は、人類学的な洞察と構造的統治の交差点で活動しています。当社の拡張プロトコルは、新しい地域においてもお客様の遺産が損なわれることがないよう保証します。",
+                vision_tag: "レガシー・ファースト・アーキテクチャ",
+                services_label: "02 / サービス",
+                services_title: "大陸横断的な <br> <span class='italic text-[var(--champagne)]'>専門知識</span>",
+                service_1_title: "構造的 <br> ガバナンス",
+                service_1_desc: "複数の法域にわたる高価値な知的財産のためのホールディング構造の強化。",
+                service_2_title: "市場 <br> 統合",
+                service_2_desc: "現地の真実と中心的な経営目標を統合する独自技術スタック。",
+                service_3_title: "キャピタル <br> フィデリティ",
+                service_3_desc: "急成長市場において高級ブランドの物語をプレミアムに保つ精密なポジショニング。",
+                projects_label: "03 / ベンチャー・マーキー",
+                projects_title: "現在進行中の <br> <span class='italic text-[var(--champagne)]'>プロジェクト</span>",
+                project_entities_label: "管理下にあるエンティティ",
+                project_1_tag: "小売・物流", project_1_desc: "プレミアム・インターナショナル・リテール＆ブルータリスト・グロッサリー。",
+                project_2_tag: "イベント・物流", project_2_desc: "ハイエンド・イベント管理＆ラグジュアリー物流。",
+                project_3_tag: "ファッション・芸術", project_3_desc: "ミニマリスト・ラグジュアリー・クチュール＆シルクロードの芸術性。",
+                project_4_tag: "旅行・キュレーション", project_4_desc: "トラベル・アーキテクチャ＆デスティネーション・キュレーション。",
+                contact_label: "04 / お問い合わせ",
+                contact_title: "未来は <br> <span class='italic font-light'>構築された。</span>",
+                contact_email_label: "直接対応",
+                footer_desc: "2026年の大陸横断経済時代に向けた高精度ビジネス・アーキテクチャ。無断複写・転載を禁じます。",
+                footer_legal_label: "法的情報",
+                footer_privacy: "プライバシー・プロトコル",
+                footer_charter: "ホールディング・憲章",
+                footer_copyright: "© 2026 PARENT COMPANY HOLDING. ALL RIGHTS RESERVED."
+            },
+            nl: { 
+                label: "Nederlands", 
+                tag: "Synthese van Beschavingen — Sinds 2026",
+                title: "De Wereldwijde <br> <span class='italic font-light text-[var(--champagne)]'>Standaard.</span>", 
+                desc: "Architectuur voor de expansie van high-fidelity entiteiten over de transcontinentale as. Wij slaan de brug tussen het rigoureuze fiscale erfgoed van Europa en de exponentiële snelheid van opkomende Aziatische markten.",
+                cta_hero: "Verken Architectuur",
+                cta_services: "Bekijk Volledige Service Architectuur",
+                nav_services: "Diensten",
+                nav_contact: "Contact",
+                lang_overlay_label: "Regioselectie",
+                lang_overlay_title: "Universele <span class='text-[var(--champagne)]'>Toegang</span>",
+                lang_overlay_close: "SLUITEN",
+                lang_overlay_hub_west: "Westerse Hub",
+                lang_overlay_hub_east: "Oost- en Midden-Oosten Hub",
+                lang_overlay_nodes_label: "Strategische Punten",
+                lang_overlay_nodes_desc: "Parent Company protocollen zijn geïmplementeerd in primaire economische centra. Onze taaldekking reflecteert onze huidige en geprojecteerde aanwezigheid voor 2026-2030.",
+                lang_overlay_status: "Alle Systemen Operationeel",
+                vision_nexus_label: "01 / Nexus",
+                vision_title: "Schaal is de <br> ultieme <span class='text-[var(--champagne)] underline decoration-1 underline-offset-8'>Vorm.</span>",
+                vision_desc: "Gevestigd in 2026, opereren wij op het snijvlak van antropologisch inzicht en structureel bestuur. Onze expansieprotocollen zorgen ervoor dat uw nalatenschap ongeschonden blijft in nieuwe territoria.",
+                vision_tag: "Legacy First Architectuur",
+                services_label: "02 / Diensten",
+                services_title: "Transcontinentale <br> <span class='italic text-[var(--champagne)]'>Expertise</span>",
+                service_1_title: "Structurele <br> Governance",
+                service_1_desc: "Het verstevigen van holdingstructuren voor hoogwaardig intellectueel eigendom in diverse rechtsgebieden.",
+                service_2_title: "Markt <br> Integratie",
+                service_2_desc: "Eigen systemen die lokale feiten synthetiseren met centrale doelstellingen.",
+                service_3_title: "Kapitaal <br> Getrouwheid",
+                service_3_desc: "Precisie-positionering die ervoor zorgt dat luxe narratieven premium blijven in snelgroeiende markten.",
+                projects_label: "03 / Venture Marquee",
+                projects_title: "Huidige <br> <span class='italic text-[var(--champagne)]'>Projecten</span>",
+                project_entities_label: "Entiteiten onder beheer",
+                project_1_tag: "Retail & Logistiek", project_1_desc: "Premium Internationale Retail & Brutalistische Supermarkt.",
+                project_2_tag: "Evenementen & Logistiek", project_2_desc: "High-end Eventmanagement & Luxe Logistiek.",
+                project_3_tag: "Mode & Artisticiteit", project_3_desc: "Minimalistische Luxe Couture & Zijderoute Kunst.",
+                project_4_tag: "Reizen & Curatie", project_4_desc: "Reisarchitectuur & Bestemmingscuratie.",
+                contact_label: "04 / Contact",
+                contact_title: "De Toekomst <br> <span class='italic font-light'>Gearchitecteerd.</span>",
+                contact_email_label: "Directe Correspondentie",
+                footer_desc: "High-fidelity bedrijfsarchitectuur voor het transcontinentale economische tijdperk van 2026. Alle rechten voorbehouden.",
+                footer_legal_label: "Juridisch",
+                footer_privacy: "Privacy Protocol",
+                footer_charter: "Holding Statuten",
+                footer_copyright: "© 2026 PARENT COMPANY HOLDING. ALLE RECHTEN VOORBEHOUDEN."
+            },
+            ko: {
+                label: "한국어",
+                tag: "문명의 합성 — Est. 2026",
+                title: "글로벌 <br> <span class='italic font-light text-[var(--champagne)]'>표준.</span>",
+                desc: "대륙축을 가로지르는 고정밀 엔티티의 확장을 설계합니다. 유럽의 엄격한 재정적 유산과 신흥 아시아 시장의 기하급수적인 속도를 연결합니다.",
+                cta_hero: "아키텍처 탐색",
+                cta_services: "전체 서비스 아키텍처 보기",
+                nav_services: "서비스",
+                nav_contact: "문의하기",
+                lang_overlay_label: "지역 선택",
+                lang_overlay_title: "유니버설 <span class='text-[var(--champagne)]'>액세스</span>",
+                lang_overlay_close: "닫기",
+                lang_overlay_hub_west: "서부 허브",
+                lang_overlay_hub_east: "아시아 허브",
+                lang_overlay_nodes_label: "전략적 노드",
+                lang_overlay_nodes_desc: "Parent Company 프로토콜은 주요 경제 중심지에 배치됩니다. 당사의 언어 서비스는 2026-2030년 현재 및 예상되는 물리적 존재감을 반영합니다.",
+                lang_overlay_status: "모든 시스템 정상 작동 중",
+                vision_nexus_label: "01 / 넥서스",
+                vision_title: "규모는 <br> 궁극적인 <span class='text-[var(--champagne)] underline decoration-1 underline-offset-8'>형태입니다.</span>",
+                vision_desc: "2026년에 설립된 당사는 인류학적 통찰력과 구조적 거버넌스의 교차점에서 운영됩니다. 당사의 확장 프로토콜은 귀하의 유산이 새로운 영토에서도 훼손되지 않도록 보장합니다.",
+                vision_tag: "레거시 퍼스트 아키텍처",
+                services_label: "02 / 서비스",
+                services_title: "대륙 간 <br> <span class='italic text-[var(--champagne)]'>전문성</span>",
+                service_1_title: "구조적 <br> 거버넌스",
+                service_1_desc: "다양한 법적 관할 구역에서 고부가가치 지적 재산을 위한 지주 구조를 강화합니다.",
+                service_2_title: "시장 <br> 통합",
+                service_2_desc: "현지 실정과 중앙 이사회의 목표를 합성하는 독점적 스택.",
+                service_3_title: "자본 <br> 충실도",
+                service_3_desc: "급성장하는 시장에서 럭셔리 내러티브가 프리미엄을 유지하도록 보장하는 정밀 포지셔닝.",
+                projects_label: "03 / 벤처 마키",
+                projects_title: "현재 <br> <span class='italic text-[var(--champagne)]'>프로젝트</span>",
+                project_entities_label: "관리 중인 엔티티",
+                project_1_tag: "리테일 및 물류", project_1_desc: "프리미엄 국제 리테일 및 브루탈리스트 그로서리.",
+                project_2_tag: "이벤트 및 물류", project_2_desc: "하이엔드 이벤트 관리 및 럭셔리 물류.",
+                project_3_tag: "패션 및 예술", project_3_desc: "미니멀리스트 럭셔리 쿠튀르 및 실크로드 예술성.",
+                project_4_tag: "여행 및 큐레이션", project_4_desc: "여행 아키텍처 및 목적지 큐레이션.",
+                contact_label: "04 / 문의하기",
+                contact_title: "미래는 <br> <span class='italic font-light'>설계되었습니다.</span>",
+                contact_email_label: "직접 서신",
+                footer_desc: "2026년 대륙 간 경제 시대를 위한 고정밀 비즈니스 아키텍처. 모든 권리 보유.",
+                footer_legal_label: "법률",
+                footer_privacy: "개인정보 보호 프로토콜",
+                footer_charter: "지주 헌장",
+                footer_copyright: "© 2026 PARENT COMPANY HOLDING. ALL RIGHTS RESERVED."
+            },
+            hi: {
+                label: "हिन्दी",
+                tag: "सभ्यताओं का संश्लेषण — स्था. 2026",
+                title: "वैश्विक <br> <span class='italic font-light text-[var(--champagne)]'>मानक।</span>",
+                desc: "ट्रांसकॉन्टिनेंटल अक्ष पर उच्च-सत्यता वाली संस्थाओं के विस्तार की वास्तुकला। हम यूरोप की कठोर वित्तीय विरासत को उभरते एशियाई बाजारों के घातीय वेग से जोड़ते हैं।",
+                cta_hero: "वास्तुकला का अन्वेषण करें",
+                cta_services: "पूर्ण सेवा वास्तुकला देखें",
+                nav_services: "सेवाएं",
+                nav_contact: "संपर्क",
+                lang_overlay_label: "क्षेत्र चयन",
+                lang_overlay_title: "सार्वभौमिक <span class='text-[var(--champagne)]'>पहुंच</span>",
+                lang_overlay_close: "बंद करें",
+                lang_overlay_hub_west: "पश्चिमी हब",
+                lang_overlay_hub_east: "एशियाई हब",
+                lang_overlay_nodes_label: "रणनीतिक नोड्स",
+                lang_overlay_nodes_desc: "Parent Company प्रोटोकॉल प्राथमिक आर्थिक केंद्रों में तैनात किए गए हैं। हमारा भाषा कवरेज 2026-2030 के लिए हमारी वर्तमान और अनुमानित भौतिक उपस्थिति को दर्शाता है।",
+                lang_overlay_status: "सभी प्रणालियाँ चालू हैं",
+                vision_nexus_label: "01 / नेक्सस",
+                vision_title: "पैमाना ही <br> अंतिम <span class='text-[var(--champagne)] underline decoration-1 underline-offset-8'>रूप है।</span>",
+                vision_desc: "2026 में स्थापित, हम मानवशास्त्रीय अंतर्दृष्टि और संरचनात्मक शासन के चौराहे पर काम करते हैं। हमारे विस्तार प्रोटोकॉल सुनिश्चित करते हैं कि आपकी विरासत नए क्षेत्रों में बेदाग रहे।",
+                vision_tag: "लिगेसी फर्स्ट आर्किटेक्चर",
+                services_label: "02 / सेवाएं",
+                services_title: "ट्रांसकॉन्टिनेंटल <br> <span class='italic text-[var(--champagne)]'>विशेषज्ञता</span>",
+                service_1_title: "संरचनात्मक <br> शासन",
+                service_1_desc: "बहु-कानूनी क्षेत्राधिकारों में उच्च-मूल्य वाली बौद्धिक संपदा के लिए होल्डिंग संरचनाओं को मजबूत करना।",
+                service_2_title: "बाजार <br> एकीकरण",
+                service_2_desc: "मालिकाना स्टैक जो केंद्रीय बोर्ड के उद्देश्यों के साथ स्थानीय जमीनी सच्चाइयों का संश्लेषण करते हैं।",
+                service_3_title: "पूँजी <br> निष्ठा",
+                service_3_desc: "सटीक स्थिति जो सुनिश्चित करती है कि तेजी से बढ़ते बाजारों में लक्जरी कथाएं प्रीमियम बनी रहें।",
+                projects_label: "03 / वेंचर मार्की",
+                projects_title: "वर्तमान <br> <span class='italic text-[var(--champagne)]'>परियोजनाएं</span>",
+                project_entities_label: "प्रबंधन के अधीन संस्थाएं",
+                project_1_tag: "रिटेल और लॉजिस्टिक्स", project_1_desc: "प्रीमियम अंतर्राष्ट्रीय रिटेल और ब्रुटलिस्ट ग्रोसरी।",
+                project_2_tag: "इवेंट और लॉजिस्टिक्स", project_2_desc: "हाई-एंड इवेंट मैनेजमेंट और लक्जरी लॉजिस्टिक्स।",
+                project_3_tag: "फैशन और कलात्मकता", project_3_desc: "न्यूनतम लक्जरी कॉउचर और सिल्क रोड कलात्मकता।",
+                project_4_tag: "यात्रा और क्यूरेशन", project_4_desc: "ट्रैवल आर्किटेक्चर और डेस्टिनेशन क्यूरेशन।",
+                contact_label: "04 / संपर्क करें",
+                contact_title: "भविष्य <br> <span class='italic font-light'>निर्मित।</span>",
+                contact_email_label: "प्रत्यक्ष पत्राचार",
+                footer_desc: "2026 ट्रांसकॉन्टिनेंटल आर्थिक युग के लिए हाई-फिडेलिटी बिजनेस आर्किटेक्चर। सर्वाधिकार सुरक्षित।",
+                footer_legal_label: "कानूनी",
+                footer_privacy: "गोपनीयता प्रोटोकॉल",
+                footer_charter: "होल्डिंग चार्टर",
+                footer_copyright: "© 2026 PARENT COMPANY HOLDING. ALL RIGHTS RESERVED."
+            },
+            ar: {
+                label: "العربية",
+                tag: "توليف الحضارات — تأسست ٢٠٢٦",
+                title: "المعيار <br> <span class='italic font-light text-[var(--champagne)]'>العالمي.</span>",
+                desc: "هندسة توسع الكيانات عالية الدقة عبر المحور العابر للقارات. نحن نجمع بين الإرث المالي الصارم لأوروبا والسرعة المتضاعفة للأسواق الآسيوية الناشئة.",
+                cta_hero: "استكشف الهندسة",
+                cta_services: "عرض هندسة الخدمات الكاملة",
+                nav_services: "الخدمات",
+                nav_contact: "اتصل بنا",
+                lang_overlay_label: "اختيار المنطقة",
+                lang_overlay_title: "وصول <span class='text-[var(--champagne)]'>عالمي</span>",
+                lang_overlay_close: "إغلاق",
+                lang_overlay_hub_west: "المركز الغربي",
+                lang_overlay_hub_east: "المركز الآسيوي",
+                lang_overlay_nodes_label: "العقد الاستراتيجية",
+                lang_overlay_nodes_desc: "يتم نشر بروتوكولات الشركة الأم في المراكز الاقتصادية الرئيسية. تعكس تغطيتنا اللغوية وجودنا المادي الحالي والمتوقع للفترة ٢٠٢٦-٢٠٣٠.",
+                lang_overlay_status: "جميع الأنظمة تعمل",
+                vision_nexus_label: "٠١ / الرابط",
+                vision_title: "النطاق هو <br> الشكل <span class='text-[var(--champagne)] underline decoration-1 underline-offset-8'>النهائي.</span>",
+                vision_desc: "تأسسنا في عام ٢٠٢٦، ونعمل عند تقاطع الرؤية الأنثروبولوجية والحوكمة الهيكلية. تضمن بروتوكولات التوسع لدينا بقاء إرثك ناصعاً في المناطق الجديدة.",
+                vision_tag: "هندسة الإرث أولاً",
+                services_label: "٠٢ / الخدمات",
+                services_title: "خبرة <br> <span class='italic text-[var(--champagne)]'>عبر القارات</span>",
+                service_1_title: "الحوكمة <br> الهيكلية",
+                service_1_desc: "تحصين هياكل الملكية للملكية الفكرية ذات القيمة العالية عبر الولايات القضائية المتعددة.",
+                service_2_title: "التكامل <br> مع السوق",
+                service_2_desc: "أنظمة ملكية تولف بين الحقائق المحلية وأهداف مجلس الإدارة المركزي.",
+                service_3_title: "أمانة <br> رأس المال",
+                service_3_desc: "تحديد المواقع بدقة لضمان بقاء الروايات الفاخرة متميزة في الأسواق سريعة النمو.",
+                projects_label: "٠٣ / مشاريع استثمارية",
+                projects_title: "المشاريع <br> <span class='italic text-[var(--champagne)]'>الحالية</span>",
+                project_entities_label: "الكيانات تحت الإدارة",
+                project_1_tag: "التجزئة والخدمات اللوجستية", project_1_desc: "تجارة التجزئة الدولية المتميزة والبقالة الوحشية.",
+                project_2_tag: "الفعاليات والخدمات اللوجستية", project_2_desc: "إدارة الفعاليات الراقية والخدمات اللوجستية الفاخرة.",
+                project_3_tag: "الأزياء والفنون", project_3_desc: "أزياء فاخرة بسيطة وفنون طريق الحرير.",
+                project_4_tag: "السفر والتقييم", project_4_desc: "هندسة السفر وتقييم الوجهات.",
+                contact_label: "٠٤ / اتصل بنا",
+                contact_title: "المستقبل <br> <span class='italic font-light'>مهندس.</span>",
+                contact_email_label: "المراسلات المباشرة",
+                footer_desc: "هندسة أعمال عالية الدقة للعصر الاقتصادي العابر للقارات لعام ٢٠٢٦. جميع الحقوق محفوظة.",
+                footer_legal_label: "قانوني",
+                footer_privacy: "بروتوكول الخصوصية",
+                footer_charter: "ميثاق القابضة",
+                footer_copyright: "© ٢٠٢٦ الشركة الأم القابضة. جميع الحقوق محفوظة."
+            }
         };
 
         function setLanguage(lang) {
-            const data = langData[lang] || langData.en;
+            const data = (langData[lang] || translations[lang]) ? { ...langData[lang], ...translations[lang] } : langData.en;
+            
+            // Update Label
             document.getElementById('current-lang-label').innerText = data.label;
+
+            // RTL Handling for Arabic
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            // Update Hero
+            if(data.tag) document.getElementById('hero-tag').innerText = data.tag;
             if(data.title) document.getElementById('hero-title').innerHTML = data.title;
             if(data.desc) document.getElementById('hero-desc').innerText = data.desc;
+            
+            // Batch Update by ID
+            Object.keys(data).forEach(key => {
+                const id = key.replace(/_/g, '-');
+                const el = document.getElementById(id);
+                if (el) {
+                    if (key.includes('title') || key.includes('desc') || key.includes('overlay_title')) {
+                        el.innerHTML = data[key];
+                    } else {
+                        el.innerText = data[key];
+                    }
+                }
+            });
+
+            // Update Multi-instance Elements (Marquee Cards)
+            for (let i = 1; i <= 4; i++) {
+                document.querySelectorAll(`.project-${i}-tag`).forEach(el => el.innerText = data[`project_${i}_tag`]);
+                document.querySelectorAll(`.project-${i}-desc`).forEach(el => el.innerText = data[`project_${i}_desc`]);
+            }
+
+            // Mobile Navigation Titles
+            if(data.nav_services) document.getElementById('mobile-nav-services').innerText = data.nav_services;
+            if(data.nav_contact) document.getElementById('mobile-nav-contact').innerText = data.nav_contact;
+
             toggleLangModal();
         }
     </script>
